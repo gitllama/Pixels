@@ -43,7 +43,7 @@ namespace DebugConsole
             time(() =>
             {
                 
-                for (var n = 0; n < 100; n++)
+                for (var n = 0; n < 1; n++)
                 {
                     dst.Load(path);
                     //Load_(dst32, path); //1867

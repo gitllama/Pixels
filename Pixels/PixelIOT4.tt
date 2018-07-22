@@ -39,50 +39,54 @@ List<string> types = new List<string>{
 }; 
 
 #>
-<# Action<string, string> loop = (type, s) => { 
-          #>int size = dst.Length * Marshal.SizeOf(typeof(<#= type #>));
-            byte[] buffer = new byte[size];
-            fs.Read(buffer, 0, size);
-            fixed (byte* pin = buffer)
-            {
-                var p = (<#= type #>*)pin;
-                for (var i = 0; i < dst.Length; i++)
+<# Action<string, string> loop = (type, code) => { 
+              #>int size = dst.Length * Marshal.SizeOf(typeof(<#= type #>));
+                byte[] buffer = new byte[size];
+                stream.Read(buffer, 0, size);
+                fixed (byte* pin = buffer)
                 {
-                    <#= s #>
+                    var p = (<#= type #>*)pin;
+                    for (var i = 0; i < dst.Length; i++)
+                    {
+                        <#= code #>
+                    }
                 }
-            }
 <# }; #>
 
 namespace Pixels.IO
 {
     public static partial class FileStream
     {
-        #region Load
-        <# foreach(var type in types){ #>
-
-        public unsafe static void Load<#= type #>(this <#= type #>[] dst, Stream fs)
+        public static class Load
         {
-            <# loop(type,"dst[i] = *p++;"); #>
+            #region Load
+            <# foreach(var type in types){ #>
+
+            public unsafe static void From<#= type #>(Stream stream, <#= type #>[] dst, int buffersize)
+            {
+                <# loop(type,"dst[i] = *p++;"); #>
+            }
+
+            <# } #>
+            #endregion
+
+            #region Load w Action
+            <# foreach(var type in types){ #>
+
+            public unsafe static void From<#= type #><T>(Stream stream, T[] dst, Func<<#= type #>, T> func, int buffersize) where T : struct
+            {
+                <# loop(type,"dst[i] = func(*p++);"); #>
+            }
+
+            <# } #>
+            #endregion
+
         }
-
-        <# } #>
-        #endregion
-
-        #region Load w Action
-        <# foreach(var type in types){ #>
-
-        public unsafe static void Load<#= type #><T>(this T[] dst, Stream fs, Func<<#= type #>, T> func) where T : struct
-        {
-            <# loop(type,"dst[i] = func(*p++);"); #>
-        }
-
-        <# } #>
-        #endregion
 
         #region Load to Int32
         <# foreach(var type in types.Where(n => n != "Int32")){ #>
 
-        public unsafe static void Load<#= type #>(this int[] dst, Stream fs)
+        public unsafe static void Load<#= type #>(this int[] dst, Stream stream)
         {
             <# loop(type,"dst[i] = (int)*p++;"); #>
         }
@@ -93,7 +97,7 @@ namespace Pixels.IO
         #region Load to Single
         <# foreach(var type in types.Where(n => n != "Single")){ #>
 
-        public unsafe static void Load<#= type #>(this float[] dst, Stream fs)
+        public unsafe static void Load<#= type #>(this float[] dst, Stream stream)
         {
             <# loop(type,"dst[i] = (float)*p++;"); #>
         }
@@ -104,7 +108,7 @@ namespace Pixels.IO
         #region Load to Double
         <# foreach(var type in types.Where(n => n != "Double")){ #>
 
-        public unsafe static void Load<#= type #>(this double[] dst, Stream fs)
+        public unsafe static void Load<#= type #>(this double[] dst, Stream stream)
         {
             <# loop(type,"dst[i] = (double)*p++;"); #>
         }

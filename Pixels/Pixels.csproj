@@ -32,9 +32,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PixelExtendedT4.cs</LastGenOutput>
     </None>
-    <None Update="PixelIOT3.tt">
+    <None Update="PixelIOT4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>PixelIOT3.cs</LastGenOutput>
+      <LastGenOutput>PixelIOT4.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -48,10 +48,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>PixelExtendedT4.tt</DependentUpon>
     </Compile>
-    <Compile Update="PixelIOT3.cs">
+    <Compile Update="PixelIOT4.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>PixelIOT3.tt</DependentUpon>
+      <DependentUpon>PixelIOT4.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
