@@ -85,7 +85,7 @@
           "lib/netstandard2.0/_._": {}
         }
       },
-      "YamlDotNet/5.0.2-pre0495": {
+      "YamlDotNet/5.0.1": {
         "type": "package",
         "compile": {
           "lib/netstandard1.3/YamlDotNet.dll": {}
@@ -422,10 +422,10 @@
         "version.txt"
       ]
     },
-    "YamlDotNet/5.0.2-pre0495": {
-      "sha512": "PcBqo8wywbO51iHi3vI3BTRds+osclRRLqmUzt5mebi9QOAEiiohUfrLPsyCqNvibw2dcM17znoJwB6DrhSrtA==",
+    "YamlDotNet/5.0.1": {
+      "sha512": "3tltCmC64lW/Ml3lrTn6BkiHht2EDlOXpoD8odb+gg2mgDi+/zK3zW21zXD67FHxk7lJC1fKjCMYgnHgk8YloA==",
       "type": "package",
-      "path": "yamldotnet/5.0.2-pre0495",
+      "path": "yamldotnet/5.0.1",
       "files": [
         "lib/net20/YamlDotNet.dll",
         "lib/net20/YamlDotNet.xml",
@@ -435,7 +435,7 @@
         "lib/net45/YamlDotNet.xml",
         "lib/netstandard1.3/YamlDotNet.dll",
         "lib/netstandard1.3/YamlDotNet.xml",
-        "yamldotnet.5.0.2-pre0495.nupkg.sha512",
+        "yamldotnet.5.0.1.nupkg.sha512",
         "yamldotnet.nuspec"
       ]
     }
@@ -446,27 +446,27 @@
       "Newtonsoft.Json >= 11.0.2",
       "System.Memory >= 4.5.1",
       "System.ValueTuple >= 4.5.0",
-      "YamlDotNet >= 5.0.2-pre0495"
+      "YamlDotNet >= 5.0.1"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\PC\\.nuget\\packages\\": {},
+    "C:\\Users\\Aki\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\PC\\Source\\Repos\\RawAnalyzer\\Pixels.Standard\\Pixels.Standard.csproj",
+      "projectUniqueName": "C:\\Users\\Aki\\Documents\\GitHub\\Pixels\\Pixels.Standard\\Pixels.Standard.csproj",
       "projectName": "Pixels.Standard",
-      "projectPath": "C:\\Users\\PC\\Source\\Repos\\RawAnalyzer\\Pixels.Standard\\Pixels.Standard.csproj",
-      "packagesPath": "C:\\Users\\PC\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\PC\\Source\\Repos\\RawAnalyzer\\Pixels.Standard\\obj\\",
+      "projectPath": "C:\\Users\\Aki\\Documents\\GitHub\\Pixels\\Pixels.Standard\\Pixels.Standard.csproj",
+      "packagesPath": "C:\\Users\\Aki\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Aki\\Documents\\GitHub\\Pixels\\Pixels.Standard\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\PC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Aki\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -510,7 +510,7 @@
           },
           "YamlDotNet": {
             "target": "Package",
-            "version": "[5.0.2-pre0495, )"
+            "version": "[5.0.1, )"
           }
         },
         "imports": [

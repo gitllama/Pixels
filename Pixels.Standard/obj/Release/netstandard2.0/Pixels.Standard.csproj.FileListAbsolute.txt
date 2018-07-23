@@ -1,9 +1,0 @@
-C:\Users\PC\Source\Repos\RawAnalyzer\Pixels.Standard\bin\Release\netstandard2.0\Pixels.Standard.deps.json
-C:\Users\PC\Source\Repos\RawAnalyzer\Pixels.Standard\bin\Release\netstandard2.0\Pixels.Standard.dll
-C:\Users\PC\Source\Repos\RawAnalyzer\Pixels.Standard\bin\Release\netstandard2.0\Pixels.Standard.pdb
-C:\Users\PC\Source\Repos\RawAnalyzer\Pixels.Standard\obj\Release\netstandard2.0\Pixels.Standard.csprojAssemblyReference.cache
-C:\Users\PC\Source\Repos\RawAnalyzer\Pixels.Standard\obj\Release\netstandard2.0\Pixels.Standard.csproj.CoreCompileInputs.cache
-C:\Users\PC\Source\Repos\RawAnalyzer\Pixels.Standard\obj\Release\netstandard2.0\Pixels.Standard.AssemblyInfoInputs.cache
-C:\Users\PC\Source\Repos\RawAnalyzer\Pixels.Standard\obj\Release\netstandard2.0\Pixels.Standard.AssemblyInfo.cs
-C:\Users\PC\Source\Repos\RawAnalyzer\Pixels.Standard\obj\Release\netstandard2.0\Pixels.Standard.dll
-C:\Users\PC\Source\Repos\RawAnalyzer\Pixels.Standard\obj\Release\netstandard2.0\Pixels.Standard.pdb

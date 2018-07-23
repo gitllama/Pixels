@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Pixels.Standard;
+using Pixels.Standard.DDL;
 using Pixels.Standard.IO;
 
 namespace Pixels.Framework
@@ -122,7 +123,7 @@ namespace Pixels.Framework
                 {
                     for(var i =0;i<raw.Width*raw.Height;i++)
                     {
-                        raw.pix[i] = preProcess.raw.pix[i] >>= 5;
+                        raw.pix[i] = preProcess.raw.pix[i] >>= 10;
                     }
                     
                     //src.Map(intermediate, (x, y, src, dst) =>
@@ -170,18 +171,18 @@ namespace Pixels.Framework
             }
             public void Run(bool color, int bitshift)
             {
-                pd.bayer = Bayer.Mono;
-                pd.Developing(mainProcess.raw, plane: "Full", parallel: true);
+                //pd.bayer = Bayer.Mono;
+                //pd.Developing(mainProcess.raw, plane: "Full", parallel: true);
 
-                pd.bitshift = bitshift;
-                if (color)
-                {
-                    pd.bayer = Bayer.RG;
-                    pd.SetGain(1.8f, 1f, 2.59f);
-                    pd.stagger = (0, 1);
-                    pd.Developing(mainProcess.raw, plane: "Full", parallel: true);
-                }
-                pd.ToWriteableBitmap(img);
+                //pd.bitshift = bitshift;
+                //if (color)
+                //{
+                //    pd.bayer = Bayer.RG;
+                //    pd.SetGain(1.8f, 1f, 2.59f);
+                //    pd.stagger = (0, 1);
+                //    pd.Developing(mainProcess.raw, plane: "Full", parallel: true);
+                //}
+                mainProcess.raw.ToWriteableBitmap24(img);
             }
         }
     }

@@ -3,16 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pixels", "Pixels\Pixels.csproj", "{CC9CD32B-F2D7-4951-B34C-8F160346184B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugConsole", "DebugConsole\DebugConsole.csproj", "{19C35EE2-D493-4E63-885D-F87E941AFC5A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{CC9CD32B-F2D7-4951-B34C-8F160346184B} = {CC9CD32B-F2D7-4951-B34C-8F160346184B}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DC62DD07-2B60-419C-AE30-785E23A9FF4C}"
 	ProjectSection(SolutionItems) = preProject
+		default.yaml = default.yaml
 		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pixels.Standard", "Pixels.Standard\Pixels.Standard.csproj", "{716BEFA4-D330-488A-B1F4-14E24E822E6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixels.Framework", "Pixels.Framework\Pixels.Framework.csproj", "{2756C386-818B-4054-B2A2-47BC1943E3CF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{716BEFA4-D330-488A-B1F4-14E24E822E6E} = {716BEFA4-D330-488A-B1F4-14E24E822E6E}
 	EndProjectSection
 EndProject
 Global
@@ -21,14 +24,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{CC9CD32B-F2D7-4951-B34C-8F160346184B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC9CD32B-F2D7-4951-B34C-8F160346184B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC9CD32B-F2D7-4951-B34C-8F160346184B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC9CD32B-F2D7-4951-B34C-8F160346184B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{19C35EE2-D493-4E63-885D-F87E941AFC5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{19C35EE2-D493-4E63-885D-F87E941AFC5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19C35EE2-D493-4E63-885D-F87E941AFC5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19C35EE2-D493-4E63-885D-F87E941AFC5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{716BEFA4-D330-488A-B1F4-14E24E822E6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{716BEFA4-D330-488A-B1F4-14E24E822E6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{716BEFA4-D330-488A-B1F4-14E24E822E6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{716BEFA4-D330-488A-B1F4-14E24E822E6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2756C386-818B-4054-B2A2-47BC1943E3CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2756C386-818B-4054-B2A2-47BC1943E3CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2756C386-818B-4054-B2A2-47BC1943E3CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2756C386-818B-4054-B2A2-47BC1943E3CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

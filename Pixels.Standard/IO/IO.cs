@@ -50,7 +50,7 @@ namespace Pixels.Standard.IO
                               : throw new Exception();
 
                 var methodinfo = callType.GetMethod(
-                    $"From{typeof(T).Name}"
+                    $"From{filetype.Name}"
                     , BindingFlags.Public | BindingFlags.Static
                     , null,
                     new Type[] { typeof(Stream), typeof(T[]), typeof(int) }
