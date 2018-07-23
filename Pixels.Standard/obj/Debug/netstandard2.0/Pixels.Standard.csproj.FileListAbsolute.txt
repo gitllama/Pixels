@@ -1,8 +1,0 @@
-C:\Users\Aki\Documents\GitHub\Pixels\Pixels.Standard\bin\Debug\netstandard2.0\Pixels.Standard.deps.json
-C:\Users\Aki\Documents\GitHub\Pixels\Pixels.Standard\bin\Debug\netstandard2.0\Pixels.Standard.dll
-C:\Users\Aki\Documents\GitHub\Pixels\Pixels.Standard\bin\Debug\netstandard2.0\Pixels.Standard.pdb
-C:\Users\Aki\Documents\GitHub\Pixels\Pixels.Standard\obj\Debug\netstandard2.0\Pixels.Standard.csproj.CoreCompileInputs.cache
-C:\Users\Aki\Documents\GitHub\Pixels\Pixels.Standard\obj\Debug\netstandard2.0\Pixels.Standard.AssemblyInfoInputs.cache
-C:\Users\Aki\Documents\GitHub\Pixels\Pixels.Standard\obj\Debug\netstandard2.0\Pixels.Standard.AssemblyInfo.cs
-C:\Users\Aki\Documents\GitHub\Pixels\Pixels.Standard\obj\Debug\netstandard2.0\Pixels.Standard.dll
-C:\Users\Aki\Documents\GitHub\Pixels\Pixels.Standard\obj\Debug\netstandard2.0\Pixels.Standard.pdb
