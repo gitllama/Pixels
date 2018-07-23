@@ -20,8 +20,95 @@ namespace DebugConsole
 {
     class Program
     {
-        static void Main(string[] args)
+        unsafe static void Main(string[] args)
         {
+            byte[] a = new byte[8000 * 4000];
+            byte[] b = new byte[8000 * 4000];
+
+            Timer(() =>
+            {
+                for (int y = 0; y < 4000; y++)
+                {
+                    for (int x = 0; x < 8000; x++)
+                    {
+                        a[x + y * 8000] = b[x + y * 8000];
+                    }
+                }
+            });
+
+            Timer(() =>
+            {
+                for (int y = 0; y < 4000; y++)
+                {
+                    var span_A = a.AsSpan().Slice(y * 8000, 8000);
+                    var span_B = b.AsSpan().Slice(y * 8000, 8000);
+                    for (int x = 0; x < span_A.Length; x++)
+                    {
+                        span_A[x] = span_B[x];
+                    }
+                }
+            });
+
+            Timer(() =>
+            {
+                var gcha = GCHandle.Alloc(a, GCHandleType.Pinned);
+                var gchb = GCHandle.Alloc(b, GCHandleType.Pinned);
+                var pina = gcha.AddrOfPinnedObject();
+                var pinb = gchb.AddrOfPinnedObject();
+
+                for (int y = 0; y < 4000; y++)
+                {
+                    for (int x = 0; x < 8000; x++)
+                    {
+                        pina = (IntPtr)Marshal.ReadByte(pinb);
+                        pina += sizeof(byte);
+                        pinb += sizeof(byte);
+                    }
+                }
+
+                gcha.Free();
+                gchb.Free();
+            });
+
+            Timer(() =>
+            {
+                var gcha = GCHandle.Alloc(a, GCHandleType.Pinned);
+                var gchb = GCHandle.Alloc(b, GCHandleType.Pinned);
+                var pina = gcha.AddrOfPinnedObject();
+                var pinb = gchb.AddrOfPinnedObject();
+
+                //byte* pa = (byte*)pina;
+                byte[] buf = new byte[8000];
+                for (int y = 0; y < 4000; y++)
+                {
+                    for (int x = 0; x < buf.Length; x++)
+                    {
+                        buf[x] = Marshal.ReadByte(pinb);
+                        pinb += sizeof(byte);
+                    }
+                    Marshal.Copy(buf, 0, pina, buf.Length);
+                    IntPtr.Add(pina, sizeof(byte) * buf.Length);
+                }
+
+                gcha.Free();
+                gchb.Free();
+            });
+
+            Timer(() =>
+            {
+                fixed (byte* pina = a)
+                fixed (byte* pinb = b)
+                {
+                    for (int y = 0; y < 4000; y++)
+                    {
+                        for (int x = 0; x < 8000; x++)
+                        {
+                            pina[x + y * 8000] = pinb[x + y * 8000];
+                        }
+                    }
+                }
+            });
+
             var path = @"C:\Users\Aki\Documents\Doc\Program\BIATs\新しいフォルダー\testpixs\000.bin";
             var configpath = @"default.yaml";
 
