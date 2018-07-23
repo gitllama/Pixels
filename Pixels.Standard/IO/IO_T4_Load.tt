@@ -1,0 +1,43 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.IO;
+using System.Runtime.InteropServices;
+
+<#@ include file="IO_T4.txt" #>
+
+namespace Pixels.Standard.IO
+{
+    public static partial class FileStream
+    {
+        public static class Load
+        {
+            #region Load<# foreach(var type in types){ #>
+
+            public unsafe static void From<#= type #>(Stream stream, <#= type #>[] dst, int buffersize)
+            {
+                <# loop(type,"dst[index++] = *p++;"); #>
+            }
+
+            <# } #>#endregion
+
+            #region Load w Action<# foreach(var type in types){ #>
+
+            public unsafe static void From<#= type #>To<T>(Stream stream, T[] dst, Func<<#= type #>, T> func, int buffersize) where T : struct
+            {
+                <# loop(type,"dst[index++] = func(*p++);"); #>
+            }
+
+            <# } #>#endregion
+
+        }
+    }
+}
