@@ -34,21 +34,48 @@ namespace DebugConsole
 
         static unsafe void Main(string[] args)
         {
-            using (var mat = new Mat("../../../sample.bmp", ImreadModes.Color))
+            //using (var mat = new Mat(@"../../../sample.bmp", ImreadModes.Color))
+            //{
+            //    var p = new Pixel<Int24>(256, 256);
+            //    for(int y=0 ; y< 256; y++)
+            //        for (int x = 0; x < 256; x++)
+            //        {
+            //            var bytes = mat.At<Vec3b>(y, x);
+
+            //            var bayer = (x % 2, y % 2);
+            //            if(bayer == (1, 0))
+            //            {
+            //                //R
+            //                p[x, y] = (Int24)(bytes[2] << 16);
+            //            }
+            //            else if(bayer == (0, 1))
+            //            {
+            //                p[x, y] = (Int24)(bytes[0] << 16);
+            //            }
+            //            else
+            //            {
+            //                p[x, y] = (Int24)(bytes[1] << 16);
+            //            }
+            //        }
+            //    p.Save("sample24.bin");
+
+            //}
+            //var p = new Pixel<Int32>(256, 256);
+            var p = new Pixel<Int32>(192, 256);
+            using (var mat = new Mat(@"sample2.bmp", ImreadModes.Color))
             {
-                var p = new Pixel<Int24>(256, 256);
-                for(int y=0 ; y< 256; y++)
+                for (int y = 0; y < 256; y++)
                     for (int x = 0; x < 256; x++)
                     {
                         var bytes = mat.At<Vec3b>(y, x);
 
                         var bayer = (x % 2, y % 2);
-                        if(bayer == (1, 0))
+                        if (bayer == (1, 0))
                         {
                             //R
                             p[x, y] = (Int24)(bytes[2] << 16);
                         }
-                        else if(bayer == (0, 1))
+                        else if (bayer == (0, 1))
                         {
                             p[x, y] = (Int24)(bytes[0] << 16);
                         }
@@ -58,24 +85,23 @@ namespace DebugConsole
                         }
                     }
                 p.Save("sample24.bin");
-
             }
 
-            //var img = new WriteableBitmap(p.Width, p.Height, 96, 96, PixelFormats.Bgr24, null);
-            //img.Lock();
-            //PixelDeveloper.Demosaic(p, img.BackBuffer, img.BackBufferStride, false);
-            //img.AddDirtyRect(new Int32Rect(0, 0, img.PixelWidth, img.PixelHeight));
-            //img.Unlock();
+            var img = new WriteableBitmap(p.Width, p.Height, 96, 96, PixelFormats.Bgr24, null);
+            img.Lock();
+            PixelDeveloper.Demosaic(p, img.BackBuffer, img.BackBufferStride, false);
+            img.AddDirtyRect(new Int32Rect(0, 0, img.PixelWidth, img.PixelHeight));
+            img.Unlock();
 
-            //using (var stream = new System.IO.FileStream("temp.bmp", FileMode.Create, FileAccess.Write))
-            //{
-            //    var encoder = new BmpBitmapEncoder();
-            //    encoder.Frames.Add(BitmapFrame.Create(img));
-            //    encoder.Save(stream);
-            //}
-            //System.Diagnostics.Process pro = new System.Diagnostics.Process();
-            //pro.StartInfo.FileName = "temp.bmp";
-            //pro.Start();
+            using (var stream = new System.IO.FileStream("temp.bmp", FileMode.Create, FileAccess.Write))
+            {
+                var encoder = new BmpBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(img));
+                encoder.Save(stream);
+            }
+            System.Diagnostics.Process pro = new System.Diagnostics.Process();
+            pro.StartInfo.FileName = "temp.bmp";
+            pro.Start();
 
 
             //    var p = new Pixel<Int32>(256, 256);
