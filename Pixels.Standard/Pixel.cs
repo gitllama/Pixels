@@ -543,7 +543,7 @@ namespace Pixels.Standard
         /// <param name="parallel">funcの外部変数は排他制御必要</param>
         public unsafe static void ForEach(this Pixel<int> src, Func<int, int> func, string subPlane = "Full", bool parallel = false)
         {
-            (int left, int top, int width, int height) plane = src.SubPlane[subPlane];
+            (int left, int top, int width, int height) plane = src.GetPlane(subPlane);
             if (parallel)
             {
                 //Lockしないので外部の変数参照はよくない

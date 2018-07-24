@@ -11,10 +11,39 @@ namespace Pixels.Standard.IO
 
     public static class FileStreamExtented
     {
+
+        #region Load
+
+        public static void Load<T>(this Pixel<T> dst, string path, int buffersize = 0, int offset = 0) where T : struct
+        {
+            using (var fs = File.Open(path, FileMode.Open))
+            {
+                CheckFileType(path, fs, typeof(T), dst);
+                buffersize = buffersize > 0 ? buffersize : dst.Width * dst.Height;
+
+                fs.Seek(offset, SeekOrigin.Current);
+
+                int size = Marshal.SizeOf(typeof(T));
+                var buffer = new byte[buffersize * size];
+
+                var handle = GCHandle.Alloc(dst.pix, GCHandleType.Pinned);
+                var pin = handle.AddrOfPinnedObject();
+
+                var rest = fs.Length - fs.Position;
+                while (rest >= buffer.Length)
+                {
+                    rest -= fs.Read(buffer, 0, buffer.Length);
+                    Marshal.Copy(buffer, 0, pin, buffer.Length);
+                    pin += buffer.Length; //IntPtr.Add(pin, buffer.Length);
+                }
+                handle.Free();
+            }
+        }
+
+        #endregion
+
         //, FileType type = FileType.Noneを使用した読み込み
         #region Load Reflection 
-
-
 
         public static void Load<T, TT>(this Pixel<TT> dst, string path, Func<T, TT> func, int buffersize = 0, int offset = 0) where T : struct where TT : struct
         {
@@ -23,7 +52,7 @@ namespace Pixels.Standard.IO
                 CheckFileType(path, fs, typeof(T), dst);
                 buffersize = buffersize > 0 ? buffersize : dst.Width * dst.Height;
 
-                fs.Position += offset;
+                fs.Seek(offset, SeekOrigin.Current);
 
                 var methodinfo = typeof(FileStream.Load).GetMethod(
                     $"From{typeof(T).Name}To"
@@ -33,31 +62,39 @@ namespace Pixels.Standard.IO
             }
         }
 
-        public static void Load<T>(this Pixel<T> dst, string path, Type filetype = null, int buffersize = 0, int offset = 0) where T : struct
+        public static void Load<T>(this Pixel<T> dst, string path, Type filetype, int buffersize = 0, int offset = 0) where T : struct
         {
-            using (var fs = File.Open(path, FileMode.Open))
+            if(typeof(T) == filetype)
             {
-                CheckFileType(path, fs, typeof(T), dst);
-                buffersize = buffersize > 0 ? buffersize : dst.Width * dst.Height;
-
-                fs.Position += offset;
-
-                filetype = filetype ?? typeof(T);
-                Type callType = filetype == typeof(T) ? typeof(FileStream.Load)
-                              : typeof(T) == typeof(Int32) ? typeof(FileStream.LoadInt32)
-                              : typeof(T) == typeof(Single) ? typeof(FileStream.LoadSingle)
-                              : typeof(T) == typeof(Double) ? typeof(FileStream.LoadDouble)
-                              : throw new Exception();
-
-                var methodinfo = callType.GetMethod(
-                    $"From{filetype.Name}"
-                    , BindingFlags.Public | BindingFlags.Static
-                    , null,
-                    new Type[] { typeof(Stream), typeof(T[]), typeof(int) }
-                    , null);
-                methodinfo.Invoke(null, new object[] { fs, dst.pix, buffersize });
+                Load<T>(dst, path, buffersize, offset);
             }
-            //typeof(int).MakeByRefType()
+            else
+            {
+                using (var fs = File.Open(path, FileMode.Open))
+                {
+                    CheckFileType(path, fs, typeof(T), dst);
+                    buffersize = buffersize > 0 ? buffersize : dst.Width * dst.Height;
+
+                    fs.Seek(offset, SeekOrigin.Current);
+
+                    filetype = filetype ?? typeof(T);
+                    Type callType = filetype == typeof(T) ? typeof(FileStream.Load)
+                                  : typeof(T) == typeof(Int32) ? typeof(FileStream.LoadInt32)
+                                  : typeof(T) == typeof(Single) ? typeof(FileStream.LoadSingle)
+                                  : typeof(T) == typeof(Double) ? typeof(FileStream.LoadDouble)
+                                  : throw new Exception();
+
+                    var methodinfo = callType.GetMethod(
+                        $"From{filetype.Name}"
+                        , BindingFlags.Public | BindingFlags.Static
+                        , null,
+                        new Type[] { typeof(Stream), typeof(T[]), typeof(int) }
+                        , null);
+                    methodinfo.Invoke(null, new object[] { fs, dst.pix, buffersize });
+                }
+                //typeof(int).MakeByRefType()
+            }
+
         }
 
         #endregion
