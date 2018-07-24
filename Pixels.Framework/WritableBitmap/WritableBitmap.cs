@@ -9,16 +9,23 @@ using System.Windows.Media.Imaging;
 
 namespace Pixels.Framework
 {
-    public static class WritableBitmapExtentions
+    public static partial class WritableBitmapExtentions
     {
+        /*<# var i = @"*/
         public static void ToWriteableBitmap24(this Pixel<int> src, WriteableBitmap bitmap)
         {
             bitmap.Lock();
 
-           // PixelDeveloper.Demosaic(src.pix, bitmap.BackBuffer, bitmap.PixelWidth, bitmap.PixelHeight, bitmap.BackBufferStride);
+            //PixelDeveloper.Demosaic(src.pix, bitmap.BackBuffer, bitmap.PixelWidth, bitmap.PixelHeight, bitmap.BackBufferStride);
 
             bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
             bitmap.Unlock();
         }
+        /*";#>*/
+
+        /*<#= i.Replace("int", "double") #>*/
+
+        /*<#= i.Replace("int", "float") #>*/
+
     }
 }

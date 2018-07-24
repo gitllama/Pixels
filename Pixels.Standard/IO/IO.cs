@@ -11,6 +11,34 @@ namespace Pixels.Standard.IO
 
     public static class FileStreamExtented
     {
+        #region Save
+
+        public static void Save<T>(this Pixel<T> dst, string path, int buffersize = 0) where T : struct
+        {
+            using (var fs = File.Open(path, FileMode.Create))
+            {
+                buffersize = buffersize > 0 ? buffersize : dst.Width * dst.Height;
+
+                int size = Marshal.SizeOf(typeof(T));
+                var buffer = new byte[buffersize * size];
+
+                var handle = GCHandle.Alloc(dst.pix, GCHandleType.Pinned);
+                var pin = handle.AddrOfPinnedObject();
+
+                var rest = dst.pix.Length * size;
+                while (rest >= buffer.Length)
+                {
+                    Marshal.Copy(pin, buffer, 0, buffer.Length);
+                    pin += buffer.Length;
+                    fs.Write(buffer, 0, buffer.Length);
+                    rest -= buffer.Length;
+                }
+                handle.Free();
+            }
+        }
+
+
+        #endregion
 
         #region Load
 
@@ -98,7 +126,6 @@ namespace Pixels.Standard.IO
         }
 
         #endregion
-
 
 
         #region LoadMarshal

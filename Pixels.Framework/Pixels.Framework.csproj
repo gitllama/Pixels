@@ -47,16 +47,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="sandbox\TestDemosic.cs" />
-    <Compile Include="WritableBitmap.cs" />
-    <None Include="sandbox\Pixel.cs" />
+    <Compile Include="WritableBitmap\WritableBitmap.cs" />
+    <Compile Include="WritableBitmap\WritableBitmap_T4.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WritableBitmap_T4.tt</DependentUpon>
+    </Compile>
     <Compile Include="Processing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="sandbox\Pixel_T4.tt">
-      <LastGenOutput>Pixel_T41.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -71,6 +69,12 @@
     <PackageReference Include="System.Memory">
       <Version>4.5.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WritableBitmap\WritableBitmap_T4.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>WritableBitmap_T4.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -87,12 +87,15 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="sandbox\standard\PixelIO.cs" />
+    <None Include="sandbox\standard\PixelExtended.cs" />
+    <None Include="sandbox\framework\Pixel.cs" />
+    <Compile Include="sandbox\Class1.cs" />
+    <None Include="sandbox\IO_Test.cs" />
+    <None Include="sandbox\TestDemosic.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="default.yaml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -104,6 +107,11 @@
       <Project>{716befa4-d330-488a-b1f4-14e24e822e6e}</Project>
       <Name>Pixels.Standard</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sandbox\framework\Pixel_T4.tt">
+      <LastGenOutput>Pixel_T41.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

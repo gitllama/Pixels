@@ -145,6 +145,8 @@ namespace Pixels.Standard
         public static implicit operator float(Int24 val) => ((int)val);
         public static implicit operator double(Int24 val) => ((int)val);
 
+        public static explicit operator Int24(int val) => new Int24() { _b0 = (byte)(val), _b1 = (byte)(val >> 8), _b2 = (byte)(val >> 16) };    
+       
         public static Int24 FromByte(byte[] bytes, int startindex = 0)
         {
             return new Int24()

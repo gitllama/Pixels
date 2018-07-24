@@ -15,8 +15,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="sandbox\PixelExtended.cs" />
-    <Compile Remove="sandbox\PixelIO.cs" />
+    <None Remove="Processing\Developing_T4.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Processing\Developing_T4.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Developing_T4.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -52,11 +58,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>IO_T4_LoadStruct.tt</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="sandbox\PixelExtended.cs" />
-    <None Include="sandbox\PixelIO.cs" />
+    <Compile Update="Processing\Developing_T4.cs">
+      <DependentUpon>Developing_T4.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
   </ItemGroup>
 
 </Project>

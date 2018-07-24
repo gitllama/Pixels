@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Pixels.Standard
 {
+    //<#/*
     public class PixelDeveloping
     {
         public readonly int Width;
@@ -273,12 +274,13 @@ namespace Pixels.Standard
 
         //LUTの実装
     }
+    // */#>
 
 
-    public static class PixelDeveloper
+    public static partial class PixelDeveloper
     {
-
-        public static unsafe void Demosaic(Pixel<int> src, IntPtr pin, int stride, bool parallel)
+        /*<# var i = @"*/
+        public static unsafe void Demosaic(Pixel<Int32> src, IntPtr pin, int stride, bool parallel)
         {
             int channel = 3;
             int residue = stride - channel * src.Width;
@@ -293,7 +295,7 @@ namespace Pixels.Standard
                     var span = src.pix.AsSpan().Slice(y * width, width);
                     for (int x = 0; x < span.Length; x++)
                     {
-                        int M = span[x];
+                        var M = span[x];
                         byte N = (byte)(M > Byte.MaxValue ? Byte.MaxValue : M < Byte.MinValue ? 0 : M);
                         //*p++ = ((N << 16) | (N << 8) | N);
                         *p++ = N;
@@ -309,7 +311,7 @@ namespace Pixels.Standard
                 {
                     for (int x = y * width; x < y * width + width; ++x)
                     {
-                        int M = src[x];
+                        var M = src[x];
                         byte N = (byte)(M > Byte.MaxValue ? Byte.MaxValue : M < Byte.MinValue ? 0 : M);
 
                         *(p++) = N;
@@ -320,5 +322,10 @@ namespace Pixels.Standard
                 }
             }
         }
+        /*";#>*/
+
+        /*<#= i.Replace("Int32", "Double") #>*/
+
+        /*<#= i.Replace("Int32", "Single") #>*/
     }
 }
