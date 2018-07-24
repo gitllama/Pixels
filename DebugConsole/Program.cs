@@ -42,11 +42,11 @@ namespace DebugConsole
             img.Lock();
             foreach (var i in new int[10000])
             {
-                PixelDeveloper.Demosaic5(p.pix, img.BackBuffer, img.PixelWidth, img.PixelHeight, img.BackBufferStride);
+                //PixelDeveloper.Demosaic5(p.pix, img.BackBuffer, img.PixelWidth, img.PixelHeight, img.BackBufferStride);
             }
             foreach (var i in new int[10000])
             {
-                PixelDeveloper.Demosaic4(p.pix, img.BackBuffer, img.PixelWidth, img.PixelHeight, img.BackBufferStride);
+                //PixelDeveloper.Demosaic4(p.pix, img.BackBuffer, img.PixelWidth, img.PixelHeight, img.BackBufferStride);
             }
 
 

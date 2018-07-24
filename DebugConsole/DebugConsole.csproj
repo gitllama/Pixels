@@ -96,9 +96,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Connected Services\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Pixels.Framework\Pixels.Framework.csproj">
       <Project>{2756c386-818b-4054-b2a2-47bc1943e3cf}</Project>
       <Name>Pixels.Framework</Name>
