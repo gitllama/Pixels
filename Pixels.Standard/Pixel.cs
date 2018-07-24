@@ -173,6 +173,8 @@ namespace Pixels.Standard
         public static implicit operator float(UInt24 val) => ((uint)val);
         public static implicit operator double(UInt24 val) => ((uint)val);
 
+        public static explicit operator UInt24(int val) => new UInt24() { _b2 = (byte)(val), _b1 = (byte)(val >> 8), _b0 = (byte)(val >> 16) };
+
         public static UInt24 FromByte(byte[] bytes, int startindex = 0)
         {
             return new UInt24()
