@@ -1,4 +1,4 @@
-﻿using Pixels.Standard;
+using Pixels.Standard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace Pixels.Framework
 {
+    /*<# var method = File.ReadAllText(Host.ResolvePath(@"WritableBitmap.cs")) #>*/
     public static partial class WritableBitmapExtentions
     {
         /*<# var i = @"*/
@@ -22,10 +23,18 @@ namespace Pixels.Framework
             bitmap.Unlock();
         }
         /*";#>*/
-
+        
         /*<#= i.Replace("int", "double") #>*/
 
         /*<#= i.Replace("int", "float") #>*/
+        
+        /*T4[A]{*/
+        public static void ToWriteableBitmap32(this Pixel<int> src, WriteableBitmap bitmap)
+        {
+        }
+        /*}T4*/
+        
+        /*<#= M["A"].Replace("int", "double") #>*/
 
     }
 }
