@@ -16,21 +16,40 @@ namespace UnitTest
         [TestMethod]
         public void TestMethod1()
         {
-            var p = new Pixel<Int32>(2256, 1178);
-            p.Load(@"C:\Users\PC\Source\Repos\RawAnalyzer\000.bin");
+            Random cRandom = new System.Random();
 
-            Assert.AreEqual(p[0], 15678);
-            Assert.AreEqual(p[0, 0], 15678);
+            var input = new Pixel<Int32>(2256, 1178);
+            var output = new Pixel<Int32>(2256, 1178);
 
-            var q = new Pixel<Int24>(2256, 1178);
-            q.Load(@"C:\Users\PC\Source\Repos\RawAnalyzer\000.bin");
+            for (var i = 0;i<input.Width*input.Height;i++)
+            {
+                input[i]= cRandom.Next(Int32.MinValue, Int32.MaxValue);
+            }
 
-            Assert.AreEqual(q[0], 15678);
+            input.Save("temp.bin");
 
-            var r = new Pixel<Single>(2256, 1178);
-            r.Load(@"C:\Users\PC\Source\Repos\RawAnalyzer\000.bin", typeof(Int32));
+            output.Load("temp.bin");
 
-            Assert.AreEqual(r[0], 15678f);
+            for (var i = 0; i < input.Width * input.Height; i++)
+            {
+                Assert.AreEqual(input[i], output[i]);
+            }
+            
+
+            //p.Load(@"C:\Users\PC\Source\Repos\RawAnalyzer\000.bin");
+
+            //Assert.AreEqual(p[0], 15678);
+            //Assert.AreEqual(p[0, 0], 15678);
+
+            //var q = new Pixel<Int24>(2256, 1178);
+            //q.Load(@"C:\Users\PC\Source\Repos\RawAnalyzer\000.bin");
+
+            //Assert.AreEqual(q[0], 15678);
+
+            //var r = new Pixel<Single>(2256, 1178);
+            //r.Load(@"C:\Users\PC\Source\Repos\RawAnalyzer\000.bin", typeof(Int32));
+
+            //Assert.AreEqual(r[0], 15678f);
         }
 
     }

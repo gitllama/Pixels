@@ -47,12 +47,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WritableBitmap.cs" />
     <Compile Include="T4\WritableBitmap_T4.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>WritableBitmap_T4.tt</DependentUpon>
     </Compile>
+    <Compile Include="WritableBitmap.cs" />
     <Compile Include="Processing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

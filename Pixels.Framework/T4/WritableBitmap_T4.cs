@@ -27,34 +27,65 @@ namespace Pixels.Framework
 
     public static partial class WritableBitmapExtentions
     {
+
+        #region Base
+        /**/
+        #endregion 
+
+
+        #region T4
+
         // 
-        // 
-        public static void ToWriteableBitmap24(this Pixel<double> src, WriteableBitmap bitmap, Options option = null)
+        public static void ToWriteableBitmap24(this Pixel<Double> src, WriteableBitmap bitmap, Options option = null)
         {
             bitmap.Lock();
 
             option = option ?? new Options();
 
-            PixelDeveloper.DemosaicMono(src, bitmap.BackBuffer, bitmap.BackBufferStride, option);
+            switch (option.bayer)
+            {
+                case Bayer.Mono:
+                    PixelDeveloper.DemosaicMono(src, bitmap.BackBuffer, bitmap.BackBufferStride, option);
+                    break;
+                default:
+                    PixelDeveloper.DemosaicColorParallel(src, bitmap.BackBuffer, bitmap.BackBufferStride, option);
+                    break;
+            }
+
+
+            bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
+            bitmap.Unlock();
+        }
+         
+
+        // 
+        public static void ToWriteableBitmap24(this Pixel<Single> src, WriteableBitmap bitmap, Options option = null)
+        {
+            bitmap.Lock();
+
+            option = option ?? new Options();
+
+            switch (option.bayer)
+            {
+                case Bayer.Mono:
+                    PixelDeveloper.DemosaicMono(src, bitmap.BackBuffer, bitmap.BackBufferStride, option);
+                    break;
+                default:
+                    PixelDeveloper.DemosaicColorParallel(src, bitmap.BackBuffer, bitmap.BackBufferStride, option);
+                    break;
+            }
+
 
             bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
             bitmap.Unlock();
         }
         
 
-        // 
-        public static void ToWriteableBitmap24(this Pixel<float> src, WriteableBitmap bitmap, Options option = null)
-        {
-            bitmap.Lock();
+        #endregion
 
-            option = option ?? new Options();
 
-            PixelDeveloper.DemosaicMono(src, bitmap.BackBuffer, bitmap.BackBufferStride, option);
 
-            bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
-            bitmap.Unlock();
-        }
-        
+
 
     }
 }

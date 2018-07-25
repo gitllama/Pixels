@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Pixels.Standard.Processing
 {
-    #region A
+    #region Options
     /*<#/*/
 
     public class Options
@@ -130,103 +130,6 @@ namespace Pixels.Standard.Processing
         }
     }
 
-    public static class PixelDevelopExtented
-    {
-
-        public static class _Demosaic
-        {
-
-
-            //static void DemosaicColor(int[] src, byte[] dst, (int x, int y)[] starts, (int x, int y)[] lengths, int width, float[] matrix, (int GR, int BG) stagger)
-            //{
-            //    (int x, int y) start;
-            //    (int x, int y) length;
-
-        
-            //    //Gr
-            //    start = starts[0];
-            //    length = lengths[0];
-            //    Parallel.For(0, length.y / 2, y =>
-            //    {
-            //        int indexY = (start.y + y * 2) * width;
-            //        var top = src.AsSpan().Slice(indexY - width + stagger.BG);
-            //        var mid = src.AsSpan().Slice(indexY + stagger.GR);
-            //        var bot = src.AsSpan().Slice(indexY + width + stagger.BG);
-            //        for (int x = start.x; x < start.x + length.x; x += 2)
-            //        {
-            //            float G = (float)mid[x] / 2.0f + ((float)top[x - 1] + (float)top[x + 1] + (float)bot[x - 1] + (float)bot[x + 1]) / 8f;
-
-            //            float R = ((float)mid[x - 1] + (float)mid[x + 1]) / 2f;
-            //            float B = ((float)top[x] + (float)bot[x]) / 2f;
-
-            //            Set(R, G, B, matrix, dst, (indexY + x) * 3);
-            //        }
-            //    });
-            //    //R
-            //    start = starts[1];
-            //    length = lengths[1];
-            //    Parallel.For(0, length.y / 2, y =>
-            //    {
-            //        int indexY = (start.y + y * 2) * width;
-            //        var top = src.AsSpan().Slice(indexY - width + stagger.BG);
-            //        var mid = src.AsSpan().Slice(indexY + stagger.GR);
-            //        var bot = src.AsSpan().Slice(indexY + width + stagger.BG);
-            //        for (int x = start.x; x < start.x + length.x; x += 2)
-            //        {
-            //            float R = (float)mid[x];
-            //            float G = ((float)top[x] + (float)mid[x - 1] + (float)mid[x + 1] + (float)bot[x]) / 4f;
-            //            float B = ((float)top[x - 1] + (float)top[x + 1] + (float)bot[x - 1] + (float)bot[x + 1]) / 4f;
-
-            //            Set(R, G, B, matrix, dst, (indexY + x) * 3);
-            //        }
-            //    });
-            //    //B
-            //    start = starts[2];
-            //    length = lengths[2];
-            //    Parallel.For(0, length.y / 2, y =>
-            //    {
-            //        int indexY = (start.y + y * 2) * width;
-            //        var top = src.AsSpan().Slice(indexY - width + stagger.GR);
-            //        var mid = src.AsSpan().Slice(indexY + stagger.BG);
-            //        var bot = src.AsSpan().Slice(indexY + width + stagger.GR);
-            //        for (int x = start.x; x < start.x + length.x; x += 2)
-            //        {
-            //            float B = (float)mid[x];
-            //            float G = ((float)top[x] + (float)mid[x - 1] + (float)mid[x + 1] + (float)bot[x]) / 4f;
-            //            float R = ((float)top[x - 1] + (float)top[x + 1] + (float)bot[x - 1] + (float)bot[x + 1]) / 4f;
-
-            //            Set(R, G, B, matrix, dst, (indexY + x) * 3);
-            //        }
-            //    });
-            //    //Gb
-            //    start = starts[3];
-            //    length = lengths[3];
-            //    Parallel.For(0, length.y / 2, y =>
-            //    {
-            //        int indexY = (start.y + y * 2) * width;
-            //        var top = src.AsSpan().Slice(indexY - width + stagger.GR);
-            //        var mid = src.AsSpan().Slice(indexY + stagger.BG);
-            //        var bot = src.AsSpan().Slice(indexY + width + stagger.GR);
-            //        for (int x = start.x; x < start.x + length.x; x += 2)
-            //        {
-            //            float G = (float)mid[x] / 2f + ((float)top[x - 1] + (float)top[x + 1] + (float)bot[x - 1] + (float)bot[x + 1]) / 8f;
-
-            //            float B = ((float)mid[x - 1] + (float)mid[x + 1]) / 2f;
-            //            float R = ((float)top[x] + (float)bot[x]) / 2f;
-
-            //            Set(R, G, B, matrix, dst, (indexY + x) * 3);
-            //        }
-            //    });
-            //}
-
-
-
-
-        }
-
-    }
-
-
     /*/#>*/
     #endregion
 
@@ -235,8 +138,10 @@ namespace Pixels.Standard.Processing
     public static partial class PixelDeveloper
     {
         #region MyRegion
+        /*<#/*/
 
-        // <#/* T4[A]{
+
+        //T4[A]{
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DemosaicMono(Pixel<Int32> src, IntPtr pin, int stride, Options option)
         {
@@ -278,9 +183,10 @@ namespace Pixels.Standard.Processing
                 }
             }
         }
-        //}T4 */#>
+        //}T4
 
-        // <#/* T4[B]{ 
+
+        //T4[B]{ 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DemosaicColor(Pixel<Int32> src, IntPtr pin, int stride, Options option)
         {
@@ -324,7 +230,7 @@ namespace Pixels.Standard.Processing
             Parallel.For(0, origin.height / 2, y =>
             {
                 byte* p = (byte*)(pin);
-                p += y * stride;
+                p += ((origin.top + y * 2) * stride + origin.left * 3);
                 int indexY = (origin.top + y * 2) * width;
                 var top = src.pix.AsSpan().Slice(indexY - width + option.stagger.BG);
                 var mid = src.pix.AsSpan().Slice(indexY + option.stagger.GR);
@@ -332,18 +238,17 @@ namespace Pixels.Standard.Processing
                 for (int x = origin.left; x < origin.left + origin.width; x += 2)
                 {
                     float G = (float)mid[x] / 2.0f + ((float)top[x - 1] + (float)top[x + 1] + (float)bot[x - 1] + (float)bot[x + 1]) / 8f;
-
                     float R = ((float)mid[x - 1] + (float)mid[x + 1]) / 2f;
                     float B = ((float)top[x] + (float)bot[x]) / 2f;
 
-                    Set(R, G, B, dst., (indexY + x) * 3, option);
+                    Set(R, G, B, ref p, option);
                 }
             });
             origin = origins[1]; //R
             Parallel.For(0, origin.height / 2, y =>
             {
                 byte* p = (byte*)(pin);
-                p += y * stride;
+                p += ((origin.top + y * 2) * stride + origin.left * 3);
                 int indexY = (origin.top + y * 2) * width;
                 var top = src.pix.AsSpan().Slice(indexY - width + option.stagger.BG);
                 var mid = src.pix.AsSpan().Slice(indexY + option.stagger.GR);
@@ -354,14 +259,14 @@ namespace Pixels.Standard.Processing
                     float G = ((float)top[x] + (float)mid[x - 1] + (float)mid[x + 1] + (float)bot[x]) / 4f;
                     float B = ((float)top[x - 1] + (float)top[x + 1] + (float)bot[x - 1] + (float)bot[x + 1]) / 4f;
 
-                    Set(R, G, B, dst, (indexY + x) * 3, option);
+                    Set(R, G, B, ref p, option);
                 }
             });
             origin = origins[2]; //B
             Parallel.For(0, origin.height / 2, y =>
             {
                 byte* p = (byte*)(pin);
-                p += y * stride;
+                p += ((origin.top + y * 2) * stride + origin.left * 3);
                 int indexY = (origin.top + y * 2) * width;
                 var top = src.pix.AsSpan().Slice(indexY - width + option.stagger.GR);
                 var mid = src.pix.AsSpan().Slice(indexY + option.stagger.BG);
@@ -372,15 +277,17 @@ namespace Pixels.Standard.Processing
                     float G = ((float)top[x] + (float)mid[x - 1] + (float)mid[x + 1] + (float)bot[x]) / 4f;
                     float R = ((float)top[x - 1] + (float)top[x + 1] + (float)bot[x - 1] + (float)bot[x + 1]) / 4f;
 
-                    Set(R, G, B, dst, (indexY + x) * 3, option);
+                    Set(R, G, B, ref p, option);
                 }
             });
             origin = origins[3]; //Gb
             Parallel.For(0, origin.height / 2, y =>
             {
                 byte* p = (byte*)(pin);
-                p += (origin.top + y * 2) * stride;
+
+                p += ((origin.top + y * 2) * stride + origin.left * 3);
                 int indexY = (origin.top + y * 2) * width;
+
                 var top = src.pix.AsSpan().Slice(indexY - width + option.stagger.GR);
                 var mid = src.pix.AsSpan().Slice(indexY + option.stagger.BG);
                 var bot = src.pix.AsSpan().Slice(indexY + width + option.stagger.GR);
@@ -391,13 +298,14 @@ namespace Pixels.Standard.Processing
                     float B = ((float)mid[x - 1] + (float)mid[x + 1]) / 2f;
                     float R = ((float)top[x] + (float)bot[x]) / 2f;
 
-                    Set(R, G, B, p, option);
+                    Set(R, G, B, ref p, option);
                 }
             });
         }
+        //}T4
 
 
-        static void Set(float R, float G, float B, byte* dst, Options option)
+        static unsafe void Set(float R, float G, float B, ref byte* dst, Options option)
         {
             //    float BB = matrix[0] * B + matrix[1] * G + matrix[2] * R;
             //    float GG = matrix[3] * B + matrix[4] * G + matrix[5] * R;
@@ -408,9 +316,11 @@ namespace Pixels.Standard.Processing
             *dst++ = option.LUT((int)BB);
             *dst++ = option.LUT((int)GG);
             *dst++ = option.LUT((int)RR);
+            dst += 3;
         }
 
-        //}T4 */#>
+
+        /*/#>*/
         #endregion
 
 
@@ -420,6 +330,10 @@ namespace Pixels.Standard.Processing
         //created <#= methods["A"].Replace("Int32", "Double") #>
 
         //created <#= methods["A"].Replace("Int32", "Single") #>
+
+        //created <#= methods["B"].Replace("Int32", "Double") #>
+
+        //created <#= methods["B"].Replace("Int32", "Single") #>
 
         #endregion
 

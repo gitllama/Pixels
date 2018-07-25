@@ -1,16 +1,5 @@
 ﻿/*
-
-
-
-
-
-
-
-
-
 */
-
-
 /* Code generated using the t4 templates */
 using System;
 using System.Collections.Generic;
@@ -29,6 +18,7 @@ namespace Pixels.Standard.IO
 
     public static partial class FileStream
     {
+        /**/
 
         public static partial class Load
         {
@@ -2266,7 +2256,10 @@ namespace Pixels.Standard.IO
             
         }
 
+        #region MyRegion
+        /**/
+        #endregion
+
 
     }
 }
-

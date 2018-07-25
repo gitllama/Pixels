@@ -19,13 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="T4\Developing_T4.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Developing_T4.cs</LastGenOutput>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="System.Memory" Version="4.5.1" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
@@ -33,13 +26,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="T4\Developing_T4.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Developing_T4.cs</LastGenOutput>
-    </None>
     <None Update="T4\IO_T4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>IO_T4.cs</LastGenOutput>
+    </None>
+    <None Update="T4\Developing_T4.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Developing_T4.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -49,9 +42,9 @@
 
   <ItemGroup>
     <Compile Update="T4\Developing_T4.cs">
-      <DependentUpon>Developing_T4.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DependentUpon>Developing_T4.tt</DependentUpon>
     </Compile>
     <Compile Update="T4\IO_T4.cs">
       <DesignTime>True</DesignTime>

@@ -32,10 +32,11 @@ namespace DebugConsole
             }
 
             Options option = new Options();
-            option.bitshift = 1;
+            option.bitshift = 0;
+            option.bayer = Bayer.GB;
 
             var img = new WriteableBitmap(p.Width, p.Height, 96, 96, PixelFormats.Bgr24, null);
-            p.ToWriteableBitmap24(img);
+            p.ToWriteableBitmap24(img, option);
 
             img.Show();
 

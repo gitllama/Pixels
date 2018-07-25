@@ -252,11 +252,26 @@ namespace Pixels.Standard.IO
 
     public static partial class FileStream
     {
+        /*<#/*/
+        static unsafe void MemSet0<T>(ref T x) where T : unmanaged
+        {
+            fixed (T* p = &x)
+            {
+                var b = (byte*)p;
+                var size = sizeof(T);
+                for (int i = 0; i < size; i++)
+                {
+                    b[i] = 0;
+                }
+            }
+        }
+        /*/#>*/
 
         public static partial class Load
         {
 
             /*<#/*/
+
 
             //T4[A]{
             public static unsafe void FromByte(Stream stream, Byte[] dst, int buffersize)

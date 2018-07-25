@@ -20,26 +20,48 @@ namespace Pixels.Framework
 
     public static partial class WritableBitmapExtentions
     {
-        // <#/*
+
+        #region Base
+        /*<#/*/
+
         //T4[A]{
-        public static void ToWriteableBitmap24(this Pixel<int> src, WriteableBitmap bitmap, Options option = null)
+        public static void ToWriteableBitmap24(this Pixel<Int32> src, WriteableBitmap bitmap, Options option = null)
         {
             bitmap.Lock();
 
             option = option ?? new Options();
 
-            PixelDeveloper.DemosaicMono(src, bitmap.BackBuffer, bitmap.BackBufferStride, option);
+            switch (option.bayer)
+            {
+                case Bayer.Mono:
+                    PixelDeveloper.DemosaicMono(src, bitmap.BackBuffer, bitmap.BackBufferStride, option);
+                    break;
+                default:
+                    PixelDeveloper.DemosaicColorParallel(src, bitmap.BackBuffer, bitmap.BackBufferStride, option);
+                    break;
+            }
+
 
             bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
             bitmap.Unlock();
         }
         //}T4 
-        // */#>
-
-        // <#= methods["A"].Replace("int", "double") #> 
         
+        /*/#>*/
+        #endregion 
 
-        // <#= methods["A"].Replace("int", "float") #>
+
+        #region T4
+
+        // <#= methods["A"].Replace("<Int32>", "<Double>") #> 
+
+        // <#= methods["A"].Replace("<Int32>", "<Single>") #>
+
+        #endregion
+
+
+
+
 
     }
 }
