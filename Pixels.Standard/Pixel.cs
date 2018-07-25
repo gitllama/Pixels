@@ -534,10 +534,7 @@ namespace Pixels.Standard
 
     public static class PixelExtented
     {
-        public static PixelDeveloping Build(this Pixel<int> src)
-        {
-            return new PixelDeveloping(src.Width, src.Height);
-        }
+
 
         /// <summary>
         /// 

@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Processing\Developing_T4.tt">
+    <Content Include="T4\Developing_T4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Developing_T4.cs</LastGenOutput>
     </Content>
@@ -33,13 +33,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="IO\IO_T4_Load.tt">
+    <None Update="T4\Developing_T4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IO_T4_Load.cs</LastGenOutput>
+      <LastGenOutput>Developing_T4.cs</LastGenOutput>
     </None>
-    <None Update="IO\IO_T4_LoadStruct.tt">
+    <None Update="T4\IO_T4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IO_T4_LoadStruct.cs</LastGenOutput>
+      <LastGenOutput>IO_T4.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -48,20 +48,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="IO\IO_T4_Load.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>IO_T4_Load.tt</DependentUpon>
-    </Compile>
-    <Compile Update="IO\IO_T4_LoadStruct.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>IO_T4_LoadStruct.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Processing\Developing_T4.cs">
+    <Compile Update="T4\Developing_T4.cs">
       <DependentUpon>Developing_T4.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="T4\IO_T4.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>IO_T4.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

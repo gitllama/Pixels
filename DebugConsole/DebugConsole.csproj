@@ -87,10 +87,8 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="sandbox\standard\PixelIO.cs" />
+    <Compile Include="Utils.cs" />
     <None Include="sandbox\standard\PixelExtended.cs" />
-    <None Include="sandbox\framework\Pixel.cs" />
-    <Compile Include="sandbox\Class1.cs" />
     <None Include="sandbox\IO_Test.cs" />
     <None Include="sandbox\TestDemosic.cs" />
   </ItemGroup>
@@ -109,9 +107,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="sandbox\framework\Pixel_T4.tt">
+    <None Include="sandbox\standard\Pixel_T4.tt">
       <LastGenOutput>Pixel_T41.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sandbox\IO_T4.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

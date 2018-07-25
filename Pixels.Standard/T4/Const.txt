@@ -1,0 +1,25 @@
+﻿<# 
+List<string> types = new List<string>{
+	"Byte",
+    "Int16",
+    "Int24", 
+    "Int32", 
+    "Int64",
+    "UInt16",
+    "UInt24", 
+    "UInt32", 
+    "UInt64",
+    "Single", 
+    "Double",
+    "Int16E",
+    "Int24E", 
+    "Int32E", 
+    "Int64E",
+    "UInt16E",
+    "UInt24E", 
+    "UInt32E", 
+    "UInt64E",
+    "SingleE", 
+    "DoubleE" 
+}; 
+#>

@@ -4,6 +4,9 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
+//ref int val =  dst.pix[index++]思ったより速度でない
+// Span<byte> buffer = stackalloc byte[BufferSize]; //Core 2.1
+// rest -= stream.Read(buffer); //Core 2.1
 namespace Pixels.Standard.sandbox
 {
     public static class IO_Test

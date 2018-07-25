@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using Pixels.Standard;
 using Pixels.Standard.DDL;
 using Pixels.Standard.IO;
+using Pixels.Standard.Processing;
 
 namespace Pixels.Framework
 {
@@ -155,7 +156,7 @@ namespace Pixels.Framework
         public class PostProcess
         {
             public WriteableBitmap img;
-            PixelDeveloping pd;
+            Options option;
             public string name = "";
             MainProcess mainProcess;
 
@@ -166,7 +167,7 @@ namespace Pixels.Framework
 
             public void Init(int width, int height, Dictionary<string, PixelType.Area> subPlanes)
             {
-                pd = new PixelDeveloping(width, height);
+                option = new Options();
                 img = new WriteableBitmap(width, height, 96, 96, System.Windows.Media.PixelFormats.Bgr24, null);
             }
             public void Run(bool color, int bitshift)
