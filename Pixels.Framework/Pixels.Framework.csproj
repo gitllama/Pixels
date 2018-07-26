@@ -71,6 +71,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="T4\Const.txt" />
     <Content Include="T4\WritableBitmap_T4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>WritableBitmap_T4.cs</LastGenOutput>

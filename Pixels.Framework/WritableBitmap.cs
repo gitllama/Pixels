@@ -1,9 +1,3 @@
-/* Code generated using the t4 templates <# 
-    var src = File.ReadAllText(Host.ResolvePath(targetPath)); 
-    var m = Regex.Matches(src, @"\/\/T4\[(?<key>[\s\S]*?)\]\{(?<value>[\s\S]*?)\/\/\}T4");
-    var methods = m.Cast<Match>().ToDictionary<Match, string, string>(k => k.Groups["key"].Value, v => v.Groups["value"].Value);
-#>*/
-
 using Pixels.Standard;
 using Pixels.Standard.Processing;
 using System;
@@ -17,14 +11,10 @@ using System.Windows.Media.Imaging;
 
 namespace Pixels.Framework
 {
-
     public static partial class WritableBitmapExtentions
     {
 
-        #region Base
-        /*<#/*/
-
-        //T4[A]{
+        /*<#= AddBlock("A",@"*/
         public static void ToWriteableBitmap24(this Pixel<Int32> src, WriteableBitmap bitmap, Options option = null)
         {
             bitmap.Lock();
@@ -45,22 +35,13 @@ namespace Pixels.Framework
             bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
             bitmap.Unlock();
         }
-        //}T4 
-        
-        /*/#>*/
-        #endregion 
+        /*")#>*/
 
 
-        #region T4
-
-        // <#= methods["A"].Replace("<Int32>", "<Double>") #> 
-
-        // <#= methods["A"].Replace("<Int32>", "<Single>") #>
-
-        #endregion
+        /*<#= Blocks["A"].Replace("<Int32>", "<Double>") #>*/
 
 
-
+        /*<#= Blocks["A"].Replace("<Int32>", "<Single>") #>*/
 
 
     }
