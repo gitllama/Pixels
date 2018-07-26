@@ -13,8 +13,7 @@ namespace Pixels.Framework
 {
     public static partial class WritableBitmapExtentions
     {
-
-        /*<#= AddBlock("A",@"*/
+        /*<#= AddT4("A", @"/*/
         public static void ToWriteableBitmap24(this Pixel<Int32> src, WriteableBitmap bitmap, Options option = null)
         {
             bitmap.Lock();
@@ -35,15 +34,7 @@ namespace Pixels.Framework
             bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
             bitmap.Unlock();
         }
-        /*")#>*/
-
-
-        /*<#= Blocks["A"].Replace("<Int32>", "<Double>") #>*/
-
-
-        /*<#= Blocks["A"].Replace("<Int32>", "<Single>") #>*/
-
-
+        /*/"#>*/
     }
 }
 
