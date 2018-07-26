@@ -1,9 +1,4 @@
-﻿/* Code generated using the t4 templates <# 
-    var src = File.ReadAllText(Host.ResolvePath(targetPath)); 
-    var m = Regex.Matches(src, @"T4\[(?<key>[\s\S]*?)\]\{(?<value>[\s\S]*?)\/\/\}T4");
-    var methods = m.Cast<Match>().ToDictionary<Match, string, string>(k => k.Groups["key"].Value, v => v.Groups["value"].Value);
-#>*/
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -12,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Pixels.Standard.Processing
 {
+
     #region Options
-    /*<#/*/
+    /*<# AddBlock("Options",@"#>*/
 
     public class Options
     {
@@ -71,6 +67,7 @@ namespace Pixels.Standard.Processing
                 Gain = (R, G, B);
             }
         }
+
         public float[] GetMatrix()
         {
             return new float[]
@@ -130,18 +127,42 @@ namespace Pixels.Standard.Processing
         }
     }
 
-    /*/#>*/
+    /*<#");#>*/
     #endregion
 
-    #region T4
 
-    public static partial class PixelDeveloper
+
+    public partial class PixelDeveloper //: LoopBlock
     {
-        #region MyRegion
-        /*<#/*/
+
+        #region Demosaic
 
 
-        //T4[A]{
+        static unsafe void Set(float R, float G, float B, ref byte* dst, Options option)
+        {
+            //    float BB = matrix[0] * B + matrix[1] * G + matrix[2] * R;
+            //    float GG = matrix[3] * B + matrix[4] * G + matrix[5] * R;
+            //    float RR = matrix[6] * B + matrix[7] * G + matrix[8] * R;
+            float BB = B;
+            float GG = G;
+            float RR = R;
+            *dst++ = option.LUT((int)BB);
+            *dst++ = option.LUT((int)GG);
+            *dst++ = option.LUT((int)RR);
+            dst += 3;
+        }
+
+        static unsafe void Set(ref byte* p, int val, Options option)
+        {
+            var M = option.LUT(val);
+            // byte N = (byte)(M > Byte.MaxValue ? Byte.MaxValue : M < Byte.MinValue ? 0 : M);
+            // *p++ = ((N << 16) | (N << 8) | N);
+            *p++ = M;
+            *p++ = M;
+            *p++ = M;
+        }
+
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DemosaicMono(Pixel<Int32> src, IntPtr pin, int stride, Options option)
         {
@@ -158,12 +179,7 @@ namespace Pixels.Standard.Processing
                     var span = src.pix.AsSpan().Slice(y * width, width);
                     for (int x = 0; x < span.Length; x++)
                     {
-                        var M = option.LUT((int)span[x]);
-                        // byte N = (byte)(M > Byte.MaxValue ? Byte.MaxValue : M < Byte.MinValue ? 0 : M);
-                        // *p++ = ((N << 16) | (N << 8) | N);
-                        *p++ = M;
-                        *p++ = M;
-                        *p++ = M;
+                        Set(ref p, (int)span[x], option);
                     }
                 });
             }
@@ -174,19 +190,13 @@ namespace Pixels.Standard.Processing
                 {
                     for (int x = y * width; x < y * width + width; ++x)
                     {
-                        var M = option.LUT((int)src.pix[x]);
-                        *(p++) = M;
-                        *(p++) = M;
-                        *(p++) = M;
+                        Set(ref p, (int)src.pix[x], option);
                     }
                     p += residue;
                 }
             }
         }
-        //}T4
 
-
-        //T4[B]{ 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DemosaicColor(Pixel<Int32> src, IntPtr pin, int stride, Options option)
         {
@@ -216,6 +226,7 @@ namespace Pixels.Standard.Processing
                 }
             }
         }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static unsafe void DemosaicColorParallel(Pixel<Int32> src, IntPtr pin, int stride, Options option)
         {
@@ -302,66 +313,19 @@ namespace Pixels.Standard.Processing
                 }
             });
         }
-        //}T4
 
 
-        static unsafe void Set(float R, float G, float B, ref byte* dst, Options option)
-        {
-            //    float BB = matrix[0] * B + matrix[1] * G + matrix[2] * R;
-            //    float GG = matrix[3] * B + matrix[4] * G + matrix[5] * R;
-            //    float RR = matrix[6] * B + matrix[7] * G + matrix[8] * R;
-            float BB = B;
-            float GG = G;
-            float RR = R;
-            *dst++ = option.LUT((int)BB);
-            *dst++ = option.LUT((int)GG);
-            *dst++ = option.LUT((int)RR);
-            dst += 3;
-        }
-
-
-        /*/#>*/
         #endregion
-
 
 
         #region T4
 
-        //created <#= methods["A"].Replace("Int32", "Double") #>
 
-        //created <#= methods["A"].Replace("Int32", "Single") #>
-
-        //created <#= methods["B"].Replace("Int32", "Double") #>
-
-        //created <#= methods["B"].Replace("Int32", "Single") #>
 
         #endregion
 
 
-
-
-
-
     }
-
-    #endregion
 
 }
 
-// エリア限定する際
-//static void DemosaicMono(int[] src, byte[] dst, (int x, int y) start, (int x, int y) length, int width)
-//{
-//    Parallel.For(0, length.y, y =>
-//    {
-//        int indexY = (start.y + y) * width;
-//        var mid = src.AsSpan().Slice(indexY);
-//        for (int x = start.x; x < start.x + length.x; x++)
-//        {
-//            int M = mid[x];
-//            byte N = (byte)(M > Byte.MaxValue ? Byte.MaxValue : M < Byte.MinValue ? 0 : M);
-//            dst[(indexY + x) * 3] = N;
-//            dst[(indexY + x) * 3 + 1] = N;
-//            dst[(indexY + x) * 3 + 2] = N;
-//        }
-//    });
-//}

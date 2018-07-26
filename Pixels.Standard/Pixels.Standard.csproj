@@ -26,9 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="T4\IO_T4.tt">
+    <None Update="T4\FileStream_T4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IO_T4.cs</LastGenOutput>
+      <LastGenOutput>FileStream_T4.cs</LastGenOutput>
     </None>
     <None Update="T4\Developing_T4.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -46,10 +46,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Developing_T4.tt</DependentUpon>
     </Compile>
-    <Compile Update="T4\IO_T4.cs">
+    <Compile Update="T4\FileStream_T4.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>IO_T4.tt</DependentUpon>
+      <DependentUpon>FileStream_T4.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
