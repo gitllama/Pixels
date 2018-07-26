@@ -21,6 +21,8 @@ namespace DebugConsole
     {
         static unsafe void Main(string[] args)
         {
+            //BenchmarkRunner.Run<SomeTest>();
+
             var sample = @"..\..\..\sample\sample.bmp";
 
             var src = Utils.ConvertBmpToPixels(sample);
