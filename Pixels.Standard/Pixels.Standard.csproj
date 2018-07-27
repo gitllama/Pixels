@@ -26,31 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="T4\FileStream_T4.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>FileStream_T4.cs</LastGenOutput>
-    </None>
-    <None Update="T4\Developing_T4.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Developing_T4.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="T4\Developing_T4.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Developing_T4.tt</DependentUpon>
-    </Compile>
-    <Compile Update="T4\FileStream_T4.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>FileStream_T4.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

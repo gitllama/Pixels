@@ -9,9 +9,9 @@ File -[ Load ]-> Raw -[ Script ]-> Src -[ config ]-> WriteableBitmap
   - offset
   - color / bayer
   - stagger
-  - 
+  -
 
-  ## 
+  ##
 
   - IO
-    - sting‚Ì16i 10i
+    - stingã®16é€² 10é€²

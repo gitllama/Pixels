@@ -1,0 +1,61 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Runtime" #>
+<#@ assembly name="System.Threading.Tasks" #>
+<#@ assembly name="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\ManagedLanguages\VBCSharp\InteractiveComponents\Microsoft.CodeAnalysis.dll" #>
+<#@ assembly name="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\ManagedLanguages\VBCSharp\InteractiveComponents\Microsoft.CodeAnalysis.CSharp.dll" #>
+<#@ assembly name="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\ManagedLanguages\VBCSharp\InteractiveComponents\Microsoft.CodeAnalysis.Workspaces.dll" #>
+<#@ assembly name="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\ManagedLanguages\VBCSharp\InteractiveComponents\Microsoft.CodeAnalysis.Workspaces.Desktop.dll" #>
+<#@ assembly name="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\CommonExtensions\Microsoft\ManagedLanguages\VBCSharp\InteractiveComponents\System.Collections.Immutable.dll" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Threading.Tasks" #>
+<#@ import namespace="Microsoft.CodeAnalysis" #>
+<#@ import namespace="Microsoft.CodeAnalysis.CSharp" #>
+<#@ import namespace="Microsoft.CodeAnalysis.CSharp.Syntax" #>
+<#@ import namespace="Microsoft.CodeAnalysis.MSBuild" #>
+<#@ output extension=".txt" #>
+<#
+    var projPath = @"C:\Users\PC\Source\Repos\ConsoleApp4\ConsoleApp4\ConsoleApp4.csproj";
+    var classNames = GetClassNamesAsync(projPath).Result;
+#>
+ 
+<# foreach (var className in classNames) {
+#>- <#= className #>
+<# } #>
+ 
+<#+
+ 
+// Roslynを使ってプロジェクトのコードからクラスのコンストラクタ定義を引っこ抜く
+async Task<List<string>> GetClassNamesAsync(string csprojPath)
+{
+    // MSBuildのワークスペース(環境みたいなもの)を作って、プロジェクトファイルを開く
+    var workspace = MSBuildWorkspace.Create();
+    var project = await workspace.OpenProjectAsync(csprojPath);
+ 
+    // ソースコードをコンパイル的なことをする(出力するわけではなくて内部的なデータを作るやつ)
+    // これでコードをパースした結果を得ることができるようになる
+    var compilation = await project.GetCompilationAsync();
+ 
+    var classNames = new List<string>();
+    // シンタックスツリーをファイル単位で適当になめていく
+    foreach (var syntaxTree in compilation.SyntaxTrees)
+    {
+        // セマンティックモデル(シンタックスツリーは文法で、それに対応する「コード的な意味」)を取得する
+        var semModel = compilation.GetSemanticModel(syntaxTree);
+ 
+        // シンタックスツリーからクラス定義のシンタックス(記述)を引っ張り出して、
+        // セマンティックモデルに問い合わせることでクラス定義(意味)を引っ張り出して、ふにゃふにゃ処理する。
+        classNames.AddRange(
+            syntaxTree.GetRoot()
+                .DescendantNodes()
+                .OfType<ClassDeclarationSyntax>()
+                .Select(x => semModel.GetDeclaredSymbol(x))
+                .Select(x => x.ToDisplayString())
+        );
+    }
+ 
+    return classNames;
+}
+#>

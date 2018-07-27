@@ -9,11 +9,27 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
+/*
+<#@ include file="T4Base.t4" once="true" #>
+*/
+
 namespace Pixels.Framework
 {
     public static partial class WritableBitmapExtentions
     {
-        /*<#= AddT4("A", @"/*/
+        #region field
+
+        /*<#/*/
+
+        private const string mayname = "Goro";
+
+        /*/#>*/
+
+        #endregion
+
+        #region [T4]ToWriteableBitmap24 
+
+        /*<# Method(@"*/
         public static void ToWriteableBitmap24(this Pixel<Int32> src, WriteableBitmap bitmap, Options option = null)
         {
             bitmap.Lock();
@@ -30,11 +46,12 @@ namespace Pixels.Framework
                     break;
             }
 
-
             bitmap.AddDirtyRect(new Int32Rect(0, 0, bitmap.PixelWidth, bitmap.PixelHeight));
             bitmap.Unlock();
         }
-        /*/"#>*/
+        /*", types, (i,j)=> i.Replace("<Int32>",$"<{j}>"));#>*/
+
+        #endregion
     }
 }
 

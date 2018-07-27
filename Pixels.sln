@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DebugConsole", "DebugConsole\DebugConsole.csproj", "{19C35EE2-D493-4E63-885D-F87E941AFC5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_DebugConsole", "DebugConsole\_DebugConsole.csproj", "{19C35EE2-D493-4E63-885D-F87E941AFC5A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pixels.Standard", "Pixels.Standard\Pixels.Standard.csproj", "{716BEFA4-D330-488A-B1F4-14E24E822E6E}"
 EndProject
@@ -12,12 +12,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixels.Framework", "Pixels.
 		{716BEFA4-D330-488A-B1F4-14E24E822E6E} = {716BEFA4-D330-488A-B1F4-14E24E822E6E}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{E7184992-6D86-4A6B-97D0-273474FC2C2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_UnitTest", "UnitTest\_UnitTest.csproj", "{E7184992-6D86-4A6B-97D0-273474FC2C2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{120BC040-B3FC-481D-9F5F-2D7704455E9E}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
-		T4.tt = T4.tt
+		TextFile1.txt = TextFile1.txt
 	EndProjectSection
 EndProject
 Global
