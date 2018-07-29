@@ -1,3 +1,0 @@
-﻿/* Code generated using the t4 templates */
-<#@ include file="../../T4.tt" #>
-<#@ include file="../WritableBitmap.cs" #>

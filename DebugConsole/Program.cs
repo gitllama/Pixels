@@ -18,8 +18,25 @@ namespace DebugConsole
         static unsafe void Main(string[] args)
         {
             //RyuJITは64bitのみ
-
+#if DEBUG
+            Bench bench = new Bench();
+            bench.ToByte_2();
+            //    var bench = new ToByte();
+            //    bench.A();
+            //    bench.B();
+            //    bench.C();
+            
+            //var a = (float)int.MaxValue+2;
+            //    var b = (float)int.MinValue-2;
+            //    unchecked
+            //    {
+            //        Console.WriteLine((int)(a));
+            //        Console.WriteLine((int)(b));
+            //    }
+            //    //0b_SCCC_CCCC_CDDD_DDDD_DDDD_DDDD_DDDD_DDDD
+#else
             BenchmarkRunner.Run<Bench>();
+#endif
         }
     }
 }
