@@ -17,6 +17,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="UnitTest\UnitTestIO.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
@@ -29,7 +33,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="UnitTest\UnitTestIO.cs">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>UnitTestIO.generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Pixels\Pixels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="UnitTest\UnitTestIO.generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UnitTestIO.cs</DependentUpon>
+    </Compile>
+    <Compile Update="UnitTest\UnitTest_IO.cs">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>UnitTest_IO.generated.cs</LastGenOutput>
+    </Compile>
   </ItemGroup>
 
 </Project>

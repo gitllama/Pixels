@@ -1,11 +1,12 @@
-using System;
+ï»¿using System;
 using Xunit;
 using Pixels;
 using Pixels.IO;
 
+/*<#@ include file="Base.t4" #>*/
 namespace XUnitTest
 {
-    public class UnitTest_IO
+    public partial class UnitTest_IO
     {
         int Width = 2256;
         int Height = 1178;
@@ -23,8 +24,9 @@ namespace XUnitTest
         }
 
 
-        [Fact(DisplayName = "IO / Save and Load")]
-        public void IOTest()
+		/*<# Method(@"*/
+        [Fact]
+        public void IOTest_Int32()
         {
             var src = new Pixel<Int32>(Width, Height);
             var dst = new Pixel<Int32>(Width, Height);
@@ -41,25 +43,17 @@ namespace XUnitTest
 
             Assert.Equal(src.pix, dst.pix);
         }
+        /*","Int32");#>*/
 
-
-        [Theory(DisplayName = "IO / header skip", Skip = "–¢ŽÀ‘•")]
+        /*<#/*/
+        [Theory(DisplayName = "IO / header skip", Skip = "æœªå®Ÿè£…")]
         [InlineData(1, 1, 2)]
         [InlineData(2, 3, 5)]
         public void AddTest(int x, int y, int ans)
         {
             //Add(x, y).Is(ans);
         }
-
-
-
-
-
-
-
-        //MemberData
-
-        //[ClassData(typeof(TestDataClass))]
-
+        /*/#>*/
     }
 }
+

@@ -500,6 +500,7 @@ namespace Pixels
 
     public static class PixelBitConverter
     {
+        public static Byte ToByte(byte[] value, int startindex) => value[0];
 
         public static Int16 ToInt16(byte[] value, int startindex) => BitConverter.ToInt16(value, startindex);
         public static Int24 ToInt24(byte[] value, int startindex) => Int24.FromByte(value, startindex);
