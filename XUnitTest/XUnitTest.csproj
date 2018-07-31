@@ -6,19 +6,8 @@
     <IsPackable>false</IsPackable>
 
     <StartupObject>XUnitTest.Program</StartupObject>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="UnitTest\UnitTestIO.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.0" />
@@ -33,13 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="UnitTest\UnitTestIO.cs">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>UnitTestIO.generated.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Pixels\Pixels.csproj" />
   </ItemGroup>
 
@@ -48,15 +30,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="UnitTest\UnitTestIO.cs">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>UnitTestIO.generated.cs</LastGenOutput>
+    </Compile>
     <Compile Update="UnitTest\UnitTestIO.generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>UnitTestIO.cs</DependentUpon>
     </Compile>
-    <Compile Update="UnitTest\UnitTest_IO.cs">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>UnitTest_IO.generated.cs</LastGenOutput>
-    </Compile>
   </ItemGroup>
+
+
 
 </Project>

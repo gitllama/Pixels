@@ -6,8 +6,10 @@ using Pixels.IO;
 /**/
 namespace XUnitTest
 {
-    public partial class UnitTest_IO
+    public partial class /**/UnitTest_IO_T4/* */
     {
+        #region MyRegion
+
         int Width = 2256;
         int Height = 1178;
         Random random = new Random();
@@ -22,6 +24,9 @@ namespace XUnitTest
         {
             // teardown
         }
+
+        #endregion
+
 
 
 		/**/
