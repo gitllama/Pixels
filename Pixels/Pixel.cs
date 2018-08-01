@@ -16,17 +16,10 @@ namespace Pixels
         public int Width { get; protected set; }
         public int Height { get; protected set; }
 
-        public T this[int x, int y]
-        {
-            get { return pix[x + y * Width]; }
-            set { pix[x + y * Width] = value; }
-        }
+        public ref T this[int x, int y] => ref pix[x + y * Width];
 
-        public T this[int index]
-        {
-            get { return pix[index]; }
-            set { pix[index] = value; }
-        }
+        public ref T this[int index] => ref pix[index];
+
 
         public int GetIndex(int x, int y) => x + y * Width;
 
@@ -163,6 +156,26 @@ namespace Pixels
 
     }
 
+
+    [Obsolete("未実装")]
+    public unsafe class PixelPointer<T> where T : unmanaged 
+    {
+        public T* pix;
+
+        public readonly int Width;
+        public readonly int Height;
+
+        public ref T this[int index] => ref pix[index];
+
+        public Dictionary<string, (int left, int top, int width, int height)> SubPlane;
+
+
+        ref readonly int M(in int x)
+        {
+            ref readonly var r = ref x;
+            return ref r;
+        }
+    }
 
 
 }

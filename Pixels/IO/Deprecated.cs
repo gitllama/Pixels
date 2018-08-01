@@ -49,7 +49,8 @@ namespace Pixels.IO.Deprecated
                     gch.Free();
                 }
             }
-        }
 
+        }
+ 
     }
 }

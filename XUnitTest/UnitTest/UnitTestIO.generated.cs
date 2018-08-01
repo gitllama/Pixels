@@ -3,17 +3,7 @@ using Xunit;
 using Pixels;
 using Pixels.IO;
 
-/*
-
-
-
-
-
-
-
-
-
-*/
+/**/
 namespace XUnitTest.Pixels
 {
     public partial class UnitTest_IO
@@ -97,13 +87,3 @@ namespace XUnitTest.Pixels
 //src.pix.AsMemory().Length;
 
 
-
-//fixed (Int32* pin = src.pix.AsSpan<byte>())
-//{
-//    for(var i = 0;i<sizeof())
-//}
-//foreach(ref var i in src.pix.AsSpan())
-//{
-
-//    i = (Int32)rnd.Next(Int32.MinValue, Int32.MaxValue);
-//}

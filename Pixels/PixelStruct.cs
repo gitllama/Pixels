@@ -10,6 +10,12 @@ namespace Pixels
     //public unsafe Byte* Byte0 { get { return &_b0; } }
     //ref struct型は「スタック上に確保することが強制される」データ型
 
+    //interface Numeric<T> : IComparable<T>, IConvertible, IEquatable<T>, IFormattable
+    //{
+    //    const T MaxValue;
+    //    const T MinValue;
+    //}
+
     [StructLayout(LayoutKind.Explicit, Pack = 1)]
     public struct Int24
     {
