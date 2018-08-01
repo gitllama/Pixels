@@ -29,11 +29,13 @@ namespace XUnitTest.Pixels
 
 
         /*<# Method(@"*/
-        [Fact]
-        public void IOTest_Int32()
+        [Theory]
+        [InlineData(2256, 1178, 0)]
+        [InlineData(2256, 1178, 16)]
+        public void IOTest_Int32(int w, int h, int offset)
         {
-            var src = new Pixel<Int32>(Width, Height);
-            var dst = new Pixel<Int32>(Width, Height);
+            var src = new Pixel<Int32>(w, h);
+            var dst = new Pixel<Int32>(w, h);
 
             byte[] rdm = new byte[8];
             for (var i = 0; i < src.pix.Length; i++)
@@ -42,23 +44,29 @@ namespace XUnitTest.Pixels
                 src.pix[i] = PixelBitConverter.ToInt32(rdm, 0);
             }
 
-            src.Save(tempPath);
+            src.Save(tempPath); //ヘッダーの入力つくりたい
             dst.Load(tempPath);
 
             Assert.Equal(src.pix, dst.pix);
         }
         /*","Int32");#>*/
 
-
-        /*<#/*/
-        [Theory(DisplayName = "IO / header skip", Skip = "未実装")]
-        [InlineData(1, 1, 2)]
-        [InlineData(2, 3, 5)]
-        public void AddTest(int x, int y, int ans)
-        {
-            //Add(x, y).Is(ans);
-        }
-        /*/#>*/
     }
 }
 
+
+//var a = src.pix.AsMemory().Pin();
+//var b = a.Pointer;
+//src.pix.AsMemory().Length;
+
+
+
+//fixed (Int32* pin = src.pix.AsSpan<byte>())
+//{
+//    for(var i = 0;i<sizeof())
+//}
+//foreach(ref var i in src.pix.AsSpan())
+//{
+
+//    i = (Int32)rnd.Next(Int32.MinValue, Int32.MaxValue);
+//}

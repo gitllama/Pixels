@@ -24,11 +24,13 @@ namespace XUnitTest.Pixels
 
 
         /**/
-        [Fact]
-        public void IOTest_Byte()
+        [Theory]
+        [InlineData(2256, 1178, 0)]
+        [InlineData(2256, 1178, 16)]
+        public void IOTest_Byte(int w, int h, int offset)
         {
-            var src = new Pixel<Byte>(Width, Height);
-            var dst = new Pixel<Byte>(Width, Height);
+            var src = new Pixel<Byte>(w, h);
+            var dst = new Pixel<Byte>(w, h);
 
             byte[] rdm = new byte[8];
             for (var i = 0; i < src.pix.Length; i++)
@@ -37,17 +39,19 @@ namespace XUnitTest.Pixels
                 src.pix[i] = PixelBitConverter.ToByte(rdm, 0);
             }
 
-            src.Save(tempPath);
+            src.Save(tempPath); //ヘッダーの入力つくりたい
             dst.Load(tempPath);
 
             Assert.Equal(src.pix, dst.pix);
         }
         /**/
-        [Fact]
-        public void IOTest_Int16()
+        [Theory]
+        [InlineData(2256, 1178, 0)]
+        [InlineData(2256, 1178, 16)]
+        public void IOTest_Int16(int w, int h, int offset)
         {
-            var src = new Pixel<Int16>(Width, Height);
-            var dst = new Pixel<Int16>(Width, Height);
+            var src = new Pixel<Int16>(w, h);
+            var dst = new Pixel<Int16>(w, h);
 
             byte[] rdm = new byte[8];
             for (var i = 0; i < src.pix.Length; i++)
@@ -56,17 +60,19 @@ namespace XUnitTest.Pixels
                 src.pix[i] = PixelBitConverter.ToInt16(rdm, 0);
             }
 
-            src.Save(tempPath);
+            src.Save(tempPath); //ヘッダーの入力つくりたい
             dst.Load(tempPath);
 
             Assert.Equal(src.pix, dst.pix);
         }
         /**/
-        [Fact]
-        public void IOTest_Int24()
+        [Theory]
+        [InlineData(2256, 1178, 0)]
+        [InlineData(2256, 1178, 16)]
+        public void IOTest_Int24(int w, int h, int offset)
         {
-            var src = new Pixel<Int24>(Width, Height);
-            var dst = new Pixel<Int24>(Width, Height);
+            var src = new Pixel<Int24>(w, h);
+            var dst = new Pixel<Int24>(w, h);
 
             byte[] rdm = new byte[8];
             for (var i = 0; i < src.pix.Length; i++)
@@ -75,15 +81,29 @@ namespace XUnitTest.Pixels
                 src.pix[i] = PixelBitConverter.ToInt24(rdm, 0);
             }
 
-            src.Save(tempPath);
+            src.Save(tempPath); //ヘッダーの入力つくりたい
             dst.Load(tempPath);
 
             Assert.Equal(src.pix, dst.pix);
         }
         /**/
 
-
-        /**/
     }
 }
 
+
+//var a = src.pix.AsMemory().Pin();
+//var b = a.Pointer;
+//src.pix.AsMemory().Length;
+
+
+
+//fixed (Int32* pin = src.pix.AsSpan<byte>())
+//{
+//    for(var i = 0;i<sizeof())
+//}
+//foreach(ref var i in src.pix.AsSpan())
+//{
+
+//    i = (Int32)rnd.Next(Int32.MinValue, Int32.MaxValue);
+//}
