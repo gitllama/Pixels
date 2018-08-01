@@ -3,33 +3,27 @@ using Xunit;
 using Pixels;
 using Pixels.IO;
 
-/**/
-namespace XUnitTest
+/*
+
+
+
+
+
+
+
+
+
+*/
+namespace XUnitTest.Pixels
 {
-    public partial class /**/UnitTest_IO_T4/* */
+    public partial class UnitTest_IO
     {
         #region MyRegion
-
-        int Width = 2256;
-        int Height = 1178;
-        Random random = new Random();
-        string tempPath = "temp.bin";
-
-        public UnitTest_IO()
-        {
-            // test setup
-        }
-
-        public void Dispose()
-        {
-            // teardown
-        }
-
+        /**/
         #endregion
 
 
-
-		/**/
+        /**/
         [Fact]
         public void IOTest_Byte()
         {
@@ -87,6 +81,7 @@ namespace XUnitTest
             Assert.Equal(src.pix, dst.pix);
         }
         /**/
+
 
         /**/
     }

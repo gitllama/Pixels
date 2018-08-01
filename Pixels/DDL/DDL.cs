@@ -9,7 +9,7 @@ using YamlDotNet;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 
-namespace Pixels.Standard.DDL
+namespace Pixels.DDL
 {
     public static class DDL
     {

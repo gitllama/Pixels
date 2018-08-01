@@ -9,6 +9,8 @@ namespace Pixels.IO.Deprecated
 {
     public static class FileStreamExtented
     {
+
+        [System.ObsoleteAttribute("use Load<T>")]
         public static void LoadMarshal<T>(this Pixel<T> dst, string path, int buffersize = 0) where T : struct
         {
             using (var fs = File.Open(path, FileMode.Open))
@@ -20,6 +22,7 @@ namespace Pixels.IO.Deprecated
             }
         }
 
+        [System.ObsoleteAttribute("use Load<T>")]
         private static unsafe void LoadMarshal<T>(Stream stream, T[] dst, int buffersize)
         {
             int size = Marshal.SizeOf(typeof(T));
@@ -47,5 +50,6 @@ namespace Pixels.IO.Deprecated
                 }
             }
         }
+
     }
 }

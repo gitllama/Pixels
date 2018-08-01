@@ -4,12 +4,12 @@ using Pixels;
 using Pixels.IO;
 
 /*<#@ include file="Base.t4" #>*/
-namespace XUnitTest
+namespace XUnitTest.Pixels
 {
-    public partial class /*<# Switch("*/UnitTest_IO/*","UnitTest_IO_T4"); #> */
+    public partial class UnitTest_IO
     {
         #region MyRegion
-
+        /*<#/*/
         int Width = 2256;
         int Height = 1178;
         Random random = new Random();
@@ -24,12 +24,11 @@ namespace XUnitTest
         {
             // teardown
         }
-
+        /*/#>*/
         #endregion
 
 
-
-		/*<# Method(@"*/
+        /*<# Method(@"*/
         [Fact]
         public void IOTest_Int32()
         {
@@ -49,6 +48,7 @@ namespace XUnitTest
             Assert.Equal(src.pix, dst.pix);
         }
         /*","Int32");#>*/
+
 
         /*<#/*/
         [Theory(DisplayName = "IO / header skip", Skip = "未実装")]
