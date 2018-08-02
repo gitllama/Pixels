@@ -10,7 +10,6 @@ namespace Pixels.IO
 
     public class MarshalCopy : IDisposable
     {
-
         GCHandle handle;
         IntPtr pin;
         public byte[] buffer;

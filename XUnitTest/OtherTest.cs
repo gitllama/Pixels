@@ -26,6 +26,23 @@ namespace XUnitTest
 
         }
 
+        [Fact]
+        public unsafe void LockPixelTest()
+        {
+            Pixel<int> a = new Pixel<int>(100, 100);
+            a[0] = 100;
+            a[1] = -100;
+            a[2] = 3;
+
+            using (var b = new LockPixel<int>(a))
+            {
+                var i = (int*)b.ToPointer();
+                Assert.Equal(a[0], *i++);
+                Assert.Equal(a[1], *i++);
+                Assert.Equal(a[2], *i++);
+            }
+        }
+
     }
 
     [LegacyJitX86Job, RyuJitX64Job]
@@ -42,6 +59,8 @@ namespace XUnitTest
         [Benchmark] public Int16 Default0() => BitConverter.ToInt16(bytes, 0);
         [Benchmark] public Int16 Default1() => Unsafe.As<byte, Int16>(ref bytes[0]);
 
+
     }
+
 }
 

@@ -26,7 +26,6 @@ namespace Pixels
 
         public int GetIndex(int x, int y) => x + y * Width;
 
-
         public (int x, int y) GetPoint(int index) => (index % Width, index / Width);
 
 
@@ -75,6 +74,38 @@ namespace Pixels
 
     }
 
+    public class ReadOnlyPixel<T> : Pixel<T> where T : struct
+    {
+
+        public new ref readonly T this[int x, int y] => ref pix[x + y * Width];
+
+        public new ref readonly T this[int index] => ref pix[index];
+
+
+        public ReadOnlyPixel(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            pix = new T[width * height];
+            SubPlane = new Dictionary<string, (int left, int top, int width, int height)>();
+        }
+
+
+        #region Planes
+
+        public Dictionary<string, (int left, int top, int width, int height)> SubPlane;
+
+        public (int left, int top, int width, int height) GetPlane(string name)
+        {
+            return SubPlane.ContainsKey(name) ? SubPlane[name] : (0, 0, Width, Height);
+        }
+
+        #endregion
+
+
+
+    }
+
     public class PixelByte<T> : Pixel<byte> where T : struct
     {
 
@@ -105,60 +136,31 @@ namespace Pixels
     }
 
 
-    [Obsolete("未実装")]
-    public class ReadOnlyPixel<T> where T : struct
+    public class LockPixel<T> : IDisposable where T : struct 
     {
+        GCHandle handle;
 
-        protected internal T[] pix;
-
-        public int Width { get; protected set; }
-        public int Height { get; protected set; }
-
-        public ref readonly T this[int x, int y] => ref pix[x + y * Width];
-
-        public ref readonly T this[int index] => ref pix[index];
-
-
-        public int GetIndex(int x, int y) => x + y * Width;
-
-        public (int x, int y) GetPoint(int index) => (index % Width, index / Width);
-
-
-        #region Constructor
-
-        protected ReadOnlyPixel()
+        public LockPixel(Pixel<T> src) 
         {
-
+            handle = GCHandle.Alloc(src.pix, GCHandleType.Pinned);
         }
 
-        public ReadOnlyPixel(int width, int height)
+        public void Dispose()
         {
-            Width = width;
-            Height = height;
-            pix = new T[width * height];
-            SubPlane = new Dictionary<string, (int left, int top, int width, int height)>();
+            handle.Free();
         }
 
-        #endregion
-
-
-        #region Planes
-
-        public Dictionary<string, (int left, int top, int width, int height)> SubPlane;
-
-        public (int left, int top, int width, int height) GetPlane(string name)
+        public IntPtr AddrOfPinnedObject()
         {
-            return SubPlane.ContainsKey(name) ? SubPlane[name] : (0, 0, Width, Height);
+            return handle.AddrOfPinnedObject();
         }
 
-        #endregion
-
-        [Conditional("DEBUG")]
-        static void DebugMethod()
+        public unsafe void* ToPointer()
         {
+            return (handle.AddrOfPinnedObject()).ToPointer();
         }
-
     }
+
 
 
     [Obsolete("未実装")]
@@ -222,6 +224,10 @@ namespace Pixels
         // IntPtr.Add(dst, sizeof(byte) * stride);
         //}
 
+        [Conditional("DEBUG")]
+        static void DebugMethod()
+        {
+        }
     }
 
 
