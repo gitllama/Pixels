@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,6 +34,7 @@ namespace Pixels
                 _ForEachSeries(src, src.GetPlane(subPlane), func);
         }
 
+
         private static unsafe void _ForEachParallel<T>(Pixel<T> src, (int left, int top, int width, int height) plane, Func<T, T> func) where T : struct
         {
             Parallel.For(plane.top, plane.top + plane.height, y =>
@@ -48,15 +50,23 @@ namespace Pixels
                 //        p++;
                 //    }
                 //}
+                int index = 0;
+                var last = span.Length;
+                while (index < last)
+                {
+                    span[index] = func(span[index]);
+                    index++;
+                }
             });
         }
 
-        private static unsafe void _ForEachSeries<T>(Pixel<T> src, (int left, int top, int width, int height) plane, Func<T, T> func) where T : struct
+        private static void _ForEachSeries<T>(Pixel<T> src, (int left, int top, int width, int height) plane, Func<T, T> func) where T : struct
         {
             (int x, int y) inc = (1, 1);
-            for (int y = plane.top * src.Width; y < (plane.top + plane.height) * src.Width; y += inc.y * src.Width)
+            for (int y = plane.top; y < plane.top + plane.height; y += inc.y)
             {
-                var span = src.pix.AsSpan(y, plane.width);
+                int yy = y * src.Width;
+                var span = src.pix.AsSpan(yy + plane.left, plane.width);
                 //fixed (int* pin = span)
                 //{
                 //    var p = pin;
@@ -72,7 +82,75 @@ namespace Pixels
                 while (index < last)
                 {
                     span[index] = func(span[index]);
-                    index++;
+                    index+= inc.x;
+                }
+            }
+        }
+
+
+        public static void ForEach2(this Pixel<int> src, Func<int, int> func, string subPlane = null, bool parallel = false)
+        {
+            if (parallel)
+                __ForEachParallel(src, src.GetPlane(subPlane), func);
+            else
+                __ForEachSeries(src, src.GetPlane(subPlane), func);
+        }
+
+        private static unsafe void __ForEachParallel(Pixel<int> src, (int left, int top, int width, int height) plane, Func<int, int> func)
+        {
+            Parallel.For(plane.top, plane.top + plane.height, y =>
+            {
+                int yy = y * src.Width;
+                var span = src.pix.AsSpan(yy + plane.left, plane.width);
+                fixed (int* pin = span)
+                {
+                    var p = pin;
+                    while (p < pin + span.Length)
+                    {
+                        *p = func(*p);
+                        p++;
+                    }
+                }
+            });
+        }
+
+        private static unsafe void __ForEachSeries(Pixel<int> src, (int left, int top, int width, int height) plane, Func<int, int> func)
+        {
+            (int x, int y) inc = (1, 1);
+            for (int y = plane.top; y < plane.top + plane.height; y += inc.y)
+            {
+                int yy = y * src.Width;
+                var span = src.pix.AsSpan(yy + plane.left, plane.width);
+                fixed (int* pin = span)
+                {
+                    var p = pin;
+                    var last = pin + span.Length;
+                    while (p < pin + span.Length)
+                    {
+                        *p = func(*p);
+                        p++;
+                    }
+                }
+            }
+        }
+
+        private static unsafe void __ForEachSeries2(Pixel<int> src, (int left, int top, int width, int height) plane, Func<int, int> func)
+        {
+            (int x, int y) inc = (1, 1);
+            for (int y = plane.top; y < plane.top + plane.height; y += inc.y)
+            {
+                int yy = y * src.Width;
+                var span = src.pix.AsSpan(yy + plane.left, plane.width);
+
+                fixed (int* pin = span)
+                {
+                    var p = pin;
+                    var last = pin + span.Length;
+                    while (p < pin + span.Length)
+                    {
+                        *p = func(*p);
+                        p++;
+                    }
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace Pixels
 
 
         public int GetIndex(int x, int y) => x + y * Width;
+
 
         public (int x, int y) GetPoint(int index) => (index % Width, index / Width);
 
@@ -50,6 +52,58 @@ namespace Pixels
 
         public (int left, int top, int width, int height) GetPlane(string name)
         {
+            name = name ?? "";
+            return SubPlane.ContainsKey(name) ? SubPlane[name] : (0, 0, Width, Height);
+        }
+
+        #endregion
+
+    }
+
+
+    [Obsolete("未実装")]
+    public class ReadOnlyPixel<T> where T : struct
+    {
+
+        private T[] pix;
+
+        public int Width { get; protected set; }
+        public int Height { get; protected set; }
+
+        public ref readonly T this[int x, int y] => ref pix[x + y * Width];
+
+        public ref readonly T this[int index] => ref pix[index];
+
+
+        public int GetIndex(int x, int y) => x + y * Width;
+
+        public (int x, int y) GetPoint(int index) => (index % Width, index / Width);
+
+
+        #region Constructor
+
+        protected ReadOnlyPixel()
+        {
+
+        }
+
+        public ReadOnlyPixel(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            pix = new T[width * height];
+            SubPlane = new Dictionary<string, (int left, int top, int width, int height)>();
+        }
+
+        #endregion
+
+
+        #region Planes
+
+        public Dictionary<string, (int left, int top, int width, int height)> SubPlane;
+
+        public (int left, int top, int width, int height) GetPlane(string name)
+        {
             return SubPlane.ContainsKey(name) ? SubPlane[name] : (0, 0, Width, Height);
         }
 
@@ -61,18 +115,14 @@ namespace Pixels
     [Obsolete("未実装")]
     public class PixelByte<T> : Pixel<byte> where T : struct 
     {
-        private Func<int, T> func = null;
+
         private int size = 0;
 
-        public new T this[int x, int y]
-        {
-            get { return func((x + y * Width)*size); }
-        }
+        public new ref T this[int x, int y] => ref Unsafe.As<byte, T>(ref pix[(x + y * Width)* size]);
 
-        public new T this[int index]
-        {
-            get { return func(index * size); }
-        }
+
+        public new ref T this[int index] => ref Unsafe.As<byte, T>(ref pix[index * size]);
+
 
         public PixelByte(int width, int height) : base()
         {
@@ -83,7 +133,6 @@ namespace Pixels
 
             SubPlane = new Dictionary<string, (int left, int top, int width, int height)>();
 
-            //リフレクションで登録
         }
 
         [Conditional("DEBUG")]
