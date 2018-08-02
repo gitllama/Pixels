@@ -460,14 +460,7 @@ namespace Pixels
 
     #region PixelBitConverter
 
-    // unsafe
-    // {
-    //     fixed (byte* pin = value.AsSpan().Slice(startindex, 3))
-    //     {
-    //        return *(Int24*)pin;
-    //     }
-    // }
-    // だと1/4のパフォーマンス
+
 
     public static class PixelBitConverter
     {
@@ -486,7 +479,7 @@ namespace Pixels
         public static Single ToSingle(byte[] value, int startindex) => BitConverter.ToSingle(value, startindex);
         public static Double ToDouble(byte[] value, int startindex) => BitConverter.ToDouble(value, startindex);
 
-        public static Int16E ToInt1E6(byte[] value, int startindex) => Int16E.FromByte(value, startindex);
+        public static Int16E ToInt16E(byte[] value, int startindex) => Int16E.FromByte(value, startindex);
         public static Int24E ToInt24E(byte[] value, int startindex) => Int24E.FromByte(value, startindex);
         public static Int32E ToInt32E(byte[] value, int startindex) => Int32E.FromByte(value, startindex);
         public static Int64E ToInt64E(byte[] value, int startindex) => Int64E.FromByte(value, startindex);

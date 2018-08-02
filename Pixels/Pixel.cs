@@ -12,10 +12,12 @@ namespace Pixels
     public class Pixel<T> where T : struct
     {
 
-        public T[] pix;
+        protected internal T[] pix;
 
         public int Width { get; protected set; }
         public int Height { get; protected set; }
+
+        public int Size { get => Width * Height; }
 
         public ref T this[int x, int y] => ref pix[x + y * Width];
 
@@ -58,6 +60,48 @@ namespace Pixels
 
         #endregion
 
+        public T[] ToArray()
+        {
+            //        using (UnmanagedMemoryStream streamSrc = new UnmanagedMemoryStream((byte*)src, size)
+            //        using (UnmanagedMemoryStream streamDst = new UnmanagedMemoryStream((byte*)dst, size)
+            //{
+            //    streamSrc.CopyTo(streamDst);
+            //    }
+            T[] dst = new T[pix.Length];
+            Array.Copy(pix, dst, pix.Length);
+
+            return dst;
+        }
+
+    }
+
+    public class PixelByte<T> : Pixel<byte> where T : struct
+    {
+
+        public int Bytesize { get; private set; }
+
+        public new ref T this[int x, int y] => ref Unsafe.As<byte, T>(ref pix[(x + y * Width) * Bytesize]);
+
+        public new ref T this[int index] => ref Unsafe.As<byte, T>(ref pix[index * Bytesize]);
+
+
+        public PixelByte(int width, int height) : base()
+        {
+            Width = width;
+            Height = height;
+            Bytesize  = Marshal.SizeOf(typeof(T));
+            pix = new byte[width * height * Bytesize ];
+
+            SubPlane = new Dictionary<string, (int left, int top, int width, int height)>();
+        }
+
+        public new T[] ToArray()
+        {
+            ref var src = ref Unsafe.As<byte[], T[]>(ref pix);
+            T[] dst = new T[src.Length];
+            Array.Copy(src, dst, src.Length);
+            return dst;
+        }
     }
 
 
@@ -65,7 +109,7 @@ namespace Pixels
     public class ReadOnlyPixel<T> where T : struct
     {
 
-        private T[] pix;
+        protected internal T[] pix;
 
         public int Width { get; protected set; }
         public int Height { get; protected set; }
@@ -109,36 +153,11 @@ namespace Pixels
 
         #endregion
 
-    }
-
-
-    [Obsolete("未実装")]
-    public class PixelByte<T> : Pixel<byte> where T : struct 
-    {
-
-        private int size = 0;
-
-        public new ref T this[int x, int y] => ref Unsafe.As<byte, T>(ref pix[(x + y * Width)* size]);
-
-
-        public new ref T this[int index] => ref Unsafe.As<byte, T>(ref pix[index * size]);
-
-
-        public PixelByte(int width, int height) : base()
-        {
-            Width = width;
-            Height = height;
-            size = Marshal.SizeOf(typeof(T));
-            pix = new byte[width * height * size];
-
-            SubPlane = new Dictionary<string, (int left, int top, int width, int height)>();
-
-        }
-
         [Conditional("DEBUG")]
         static void DebugMethod()
         {
         }
+
     }
 
 

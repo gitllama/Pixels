@@ -54,6 +54,29 @@ namespace Pixels.IO
     public static partial class FileStreamExtented
     {
 
+        public static void Save<T>(this PixelByte<T> dst, string path, byte[] header = null) where T : struct
+        {
+            using (var fs = File.Open(path, FileMode.Create))
+            {
+                if (header != null)
+                    fs.Write(header, 0, header.Length);
+
+                fs.Write(dst.pix, 0, dst.pix.Length);
+            }
+        }
+
+        public static void Load<T>(this PixelByte<T> dst, string path, int offset = 0) where T : struct
+        {
+            using (var fs = File.Open(path, FileMode.Open))
+            {
+                FileInfo.CheckFileType(path, fs, typeof(T), dst);
+                fs.Seek(offset, SeekOrigin.Current);
+
+                fs.Read(dst.pix, 0, dst.pix.Length);
+            }
+        }
+
+
         public static void Save<T>(this Pixel<T> dst, string path, int buffersize = 0, byte[] header = null) where T : struct
         {
             buffersize = buffersize > 0 ? buffersize : dst.Width * dst.Height;
@@ -73,7 +96,6 @@ namespace Pixels.IO
                 }
             }
         }
-
 
         public static void Load<T>(this Pixel<T> dst, string path, int buffersize = 0, int offset = 0) where T : struct
         {

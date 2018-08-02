@@ -5,8 +5,6 @@ using Xunit;
 
 using Pixels;
 using Pixels.IO;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
 
 namespace XUnitTest.Freamwork
 {

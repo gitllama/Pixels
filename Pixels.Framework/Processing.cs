@@ -96,7 +96,7 @@ namespace Pixels.Framework
 
             public void Run(string path)
             {
-                raw.Load(path, setting.GetFileType());
+                //raw.Load(path, setting.GetFileType());
             }
 
         }
@@ -123,7 +123,7 @@ namespace Pixels.Framework
                 {
                     for(var i =0;i<raw.Width*raw.Height;i++)
                     {
-                        raw.pix[i] = preProcess.raw.pix[i] >>= 10;
+                        //raw.pix[i] = preProcess.raw.pix[i] >>= 10;
                     }
                     
                     //src.Map(intermediate, (x, y, src, dst) =>

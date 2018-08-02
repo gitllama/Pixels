@@ -34,14 +34,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="UnitTestIO.cs">
+    <Compile Update="IOTest.cs">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>UnitTestIO.generated.cs</LastGenOutput>
+      <LastGenOutput>IOTest.generated.cs</LastGenOutput>
     </Compile>
-    <Compile Update="UnitTestIO.generated.cs">
+    <Compile Update="IOTest.generated.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>UnitTestIO.cs</DependentUpon>
+      <DependentUpon>IOTest.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 
