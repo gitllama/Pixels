@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -96,7 +97,7 @@ namespace Pixels.Extensions
             if (parallel)
                 _MapParallel(src, dst, func, sts);
             else
-                _MapSeries(src, dst, func, sts);
+                _MapSeries(src, dst, func, sts);                
         }
 
         private static void _MapParallel<T, U>(Pixel<T> src, Pixel<U> dst,
@@ -119,12 +120,25 @@ namespace Pixels.Extensions
             (int left, int top, int width, int height, int incX, int incY) sts)
             where T : struct where U : struct
         {
-            for (int y = sts.top; y < sts.top + sts.height; y += sts.incY)
-                for (int x = sts.left; x < sts.left + sts.width; x += sts.incX)
+            unsafe
+            {
+                using (var _src = new LockPixel<T>(src))
+                using (var _dst = new LockPixel<U>(dst))
                 {
-                    int index = src.GetIndex(x, y);
-                    dst[index] = func(src[index]);
+                    var pin_src = (byte*)_src.ToPointer();
+                    var pin_dst = (byte*)_dst.ToPointer();
+
+                    for (int y = sts.top; y < sts.top + sts.height; y += sts.incY)
+                    {
+                        for (int x = sts.left; x < sts.left + sts.width; x += sts.incX)
+                        {
+                            var p_src = pin_src + (y * src.Width + x) * _src.Size;
+                            var p_dst = pin_dst + (y * src.Width + x) * _dst.Size;
+                            Unsafe.As<byte, U>(ref *p_dst) = func(Unsafe.As<byte,T>(ref *p_src));
+                        }
+                    }
                 }
+            }
         }
 
         #endregion
