@@ -32,6 +32,7 @@ namespace XUnitTest
             var dst1 = new Pixel<int>(w, h);
             var dst2 = new Pixel<int>(w, h);
 
+            src.Map(dst1, (i) => i - 1, bayer: "Gr");
 
             src.Map(dst1, (x, y, s, d) => { d[x, y] = s[x, y] + 1; });
             src.Map(dst2, (x, y, s, d) => { d[x, y] = s[x, y] + 1; }, parallel: true);
