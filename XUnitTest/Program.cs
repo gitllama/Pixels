@@ -8,10 +8,17 @@ namespace XUnitTest
     {
         static void Main(string[] args)
         {
+#if DEBUG
 
+#else
+            //BenchmarkRunner.Run<StructBench>();
+            //BenchmarkRunner.Run<PixelBench>();
+
+            BenchmarkRunner.Run<ExtensionsBench>();
             //BenchmarkRunner.Run<LoopBlock>();
             //BenchmarkRunner.Run<Bench_IO>();
-            //BenchmarkRunner.Run<BenchExtended>();
+
+#endif
         }
     }
 }

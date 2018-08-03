@@ -32,12 +32,6 @@ lock (lockObject)
 
 
 
-//http://article.higlabo.com/ja/thread_locking.html
-//http://xptn.dtiblog.com/blog-entry-94.html
-//http://xptn.dtiblog.com/blog-entry-85.html
-
-
-
 
 //class Pixel
 //{

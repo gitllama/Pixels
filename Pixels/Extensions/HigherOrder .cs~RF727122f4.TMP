@@ -8,20 +8,8 @@ namespace Pixels.Extensions
 {
     public static class HigherOrder
     {
-        /* forEach : 配列の個々の要素を処理
-         * 
-         * Map : 配列の個々の要素を加工 / 写像
-         * 
-         *  1 : Map(Pixel, Pixel, Action<int,int,Pixel,Pixel>) : x, yを取らないといけないので普通のループ
-         *  2 : Map(Pixel, Pixel, Func<T, U>)                  : index参照しないのでunsafeで最適化
-         * 
-         * 
-         * 
-         * 
-         */
-        // 
-        // 
-
+        // forEach : 配列の個々の要素を処理
+        // map : 配列の個々の要素を加工 / 写像
         // reduce : 配列の要素を左から右へ処理する / previousValue, currentValue, index, array
 
         // filter : 配列の個々の要素を判定
@@ -41,99 +29,20 @@ namespace Pixels.Extensions
         *
         */
 
-        #region Map 1
-        /*<#/*/
 
-        public static void Map<T, U>( this Pixel<T> src, Pixel<U> dst, 
-            Action<int, int, Pixel<T>, Pixel<U>> action, 
-            string subPlane = null, string bayer = null, bool parallel = false)
-            where T :struct where U : struct
-        {
-            var sts = src.LoopState(subPlane, bayer);
-            if (parallel)
-                _MapParallel(src, dst, action, sts);
-            else
-                _MapSeries(src, dst, action, sts);
-        }
 
-        private static void _MapParallel<T, U>( Pixel<T> src, Pixel<U> dst, 
-            Action<int, int, Pixel<T>, Pixel<U>> action, 
-            (int left, int top, int width, int height, int incX, int incY) sts) 
-            where T : struct where U : struct
-        {
-            Parallel.For(sts.top, (sts.top + sts.height) / sts.incX, y =>
-            {
-                for (int x = sts.left; x < sts.left + sts.width; x += sts.incX)
-                {
-                    action(x, y * sts.incX, src, dst);
-                }
-            });
-        }
-
-        private static void _MapSeries<T, U>( Pixel<T> src, Pixel<U> dst, 
-            Action<int, int, Pixel<T>, Pixel<U>> action, 
-            (int left, int top, int width, int height, int incX, int incY) sts) 
-            where T : struct where U : struct
-        {
-            for (int y = sts.top; y < sts.top + sts.height; y += sts.incY)
-                for (int x = sts.left; x < sts.left + sts.width; x += sts.incX)
-                {
-                    action(x, y, src, dst);
-                }
-        }
-
-        /*/#>*/
-        #endregion
-
-        #region Map2
-
-        public static void Map<T, U>(this Pixel<T> src, Pixel<U> dst,
-            Func<T, U> func, 
-            string subPlane = null, string bayer = null, bool parallel = false)
-            where T : struct where U : struct
-        {
-            var sts = src.LoopState(subPlane, bayer);
-            if (parallel)
-                _MapParallel(src, dst, func, sts);
-            else
-                _MapSeries(src, dst, func, sts);
-        }
-
-        private static void _MapParallel<T, U>(Pixel<T> src, Pixel<U> dst,
-            Func<T, U> func,
-            (int left, int top, int width, int height, int incX, int incY) sts)
-            where T : struct where U : struct
-        {
-            Parallel.For(sts.top, (sts.top + sts.height) / sts.incX, y =>
-            {
-                for (int x = sts.left; x < sts.left + sts.width; x += sts.incX)
-                {
-                    int index = src.GetIndex(x, y * sts.incY);
-                    dst[index] = func(src[index]);
-                }
-            });
-        }
-
-        private static void _MapSeries<T, U>(Pixel<T> src, Pixel<U> dst,
-            Func<T, U> func,
-            (int left, int top, int width, int height, int incX, int incY) sts)
-            where T : struct where U : struct
-        {
-            for (int y = sts.top; y < sts.top + sts.height; y += sts.incY)
-                for (int x = sts.left; x < sts.left + sts.width; x += sts.incX)
-                {
-                    int index = src.GetIndex(x, y);
-                    dst[index] = func(src[index]);
-                }
-        }
-
-        #endregion
 
 
 
         #region ForEach
 
-
+        public static void ForEach<T>(this Pixel<T> src, Func<T, T> func, string subPlane = null, bool parallel = false) where T : struct
+        {
+            if (parallel)
+                _ForEachParallel(src, src.GetPlane(subPlane), func);
+            else
+                _ForEachSeries(src, src.GetPlane(subPlane), func);
+        }
 
 
         private static unsafe void _ForEachParallel<T>(Pixel<T> src, (int left, int top, int width, int height) plane, Func<T, T> func) where T : struct
@@ -261,10 +170,28 @@ namespace Pixels.Extensions
 
         #region Map
 
+        public static void Map<T, U>(this Pixel<T> src, Pixel<U> dst, Action<int, int, Pixel<T>, Pixel<U>> action, string subPlane = null, string bayer = null, bool parallel = false) where T : struct where U : struct
+        {
+            var sts = src.LoopState(subPlane, bayer);
+            _MapSeries<T, U>(src, dst, action, sts);
+            //if (parallel)
+            //    _MapParallel(src, dst, src.GetPlane(subPlane), action);
+            //else
+            //    _MapParallel(src, dst, src.GetPlane(subPlane), action);
+        }
 
+        public static void Map<T, U>(this Pixel<T> src, Pixel<U> dst, Func<T, U> func, string subPlane = null, string bayer = null, bool parallel = false) where T : struct where U : struct
+        {
+            throw new NotImplementedException();
+            //var a = src.LoopState(subPlane, bayer);
 
+            //if (parallel)
+            //    _MapParallel(src, dst, src.GetPlane(subPlane), func);
+            //else
+            //    _MapParallel(src, dst, src.GetPlane(subPlane), func);
+        }
 
-        private static unsafe void __MapParallel<T, U>(Pixel<T> src, Pixel<U> dst, Action<int, int, Pixel<T>, Pixel<U>> action, (int left, int top, int width, int height, int incX, int incY) sts) where T : struct where U : struct
+        private static unsafe void _MapParallel<T, U>(Pixel<T> src, Pixel<U> dst, Action<int, int, Pixel<T>, Pixel<U>> action, (int left, int top, int width, int height, int incX, int incY) sts) where T : struct where U : struct
         {
             throw new NotImplementedException();
             //using (var _src = new PixelLoop)
@@ -285,7 +212,24 @@ namespace Pixels.Extensions
             //    });
         }
 
+        private static unsafe void _MapSeries<T, U>(Pixel<T> src, Pixel<U> dst, Action<int, int, Pixel<T>, Pixel<U>> action, (int left, int top, int width, int height, int incX, int incY) sts) where T : struct where U : struct
+        {
 
+                //for (int y = plane.top; y < plane.top + plane.height; y++)
+                //{
+                //    int yy = y * src.Width;
+                //    var span = src.pix.AsSpan().Slice(yy + plane.left, plane.width);
+                //    fixed (int* pin = span)
+                //    {
+                //        var p = pin;
+                //        while (p < pin + span.Length)
+                //        {
+                //            *p = func(*p);
+                //            p++;
+                //        }
+                //    }
+                //}
+        }
 
         #endregion
     }
@@ -303,8 +247,8 @@ namespace Pixels.Extensions.Benchmark
                 using (var _src = new LockPixel<int>(src))
                 using (var _dst = new LockPixel<int>(dst))
                 {
-                    var p_src = (int*)_src.ToPointer();
-                    var p_dst = (int*)_dst.ToPointer();
+                    //var p_src = (int*)_src.ToPointer();
+                    //var p_dst = (int*)_dst.ToPointer();
 
                     for (int y = sts.top; y < sts.top + sts.height; y += sts.incY)
                     {
@@ -317,6 +261,18 @@ namespace Pixels.Extensions.Benchmark
             }
         }
 
+        public static void MapTest2(this Pixel<int> src, Pixel<int> dst, Action<int, int, Pixel<int>, Pixel<int>> action, string subPlane = null, string bayer = null, bool parallel = false)
+        {
+            var sts = src.LoopState(subPlane, bayer);
+            for (int y = sts.top; y < sts.top + sts.height; y += sts.incY)
+            {
+                for (int x = sts.left; x < sts.left + sts.width; x += sts.incX)
+                {
+                    action(x, y, src, dst);
+                }
+            }
+
+        }
 
     }
 }

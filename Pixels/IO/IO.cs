@@ -83,7 +83,7 @@ namespace Pixels.IO
             using (var fs = File.Open(path, FileMode.Create))
             using (var p = new MarshalCopy(dst.pix, buffersize, typeof(T)))
             {
-                if(header != null)
+                if (header != null)
                     fs.Write(header, 0, header.Length);
 
                 var rest = dst.pix.Length * p.size;
@@ -197,14 +197,89 @@ namespace Pixels.IO
 
     }
 
+    // var hoge = new HogeBuilder
+    // {
+    //    Age = 10,
+    //    Name = "hogehoge"
+    // }.Build();
+    public class PixelBuilder
+    {
+        public int Width;
+        public int Height;
+        public string path;
+        public Type type;
+
+        public Pixel<T> Build<T>() where T : struct
+        {
+            var dst = new Pixel<T>(Width, Height);
+
+            if(type != typeof(string))
+            {
+
+            }
+            else
+            {
+
+            }
+
+            return null;
+        }
+    }
 }
 
+namespace Pixels.IO.Deprecated
+{
+    public static class FileStreamExtented
+    {
 
+        [System.ObsoleteAttribute("use Load<T>")]
+        public static void LoadMarshal<T>(this Pixel<T> dst, string path, int buffersize = 0) where T : struct
+        {
+            using (var fs = File.Open(path, FileMode.Open))
+            {
+                FileInfo.CheckFileType(path, fs, typeof(T), dst);
+                buffersize = buffersize > 0 ? buffersize : dst.Width * dst.Height;
 
+                LoadMarshal<T>(fs, dst.pix, buffersize);
+            }
+        }
+
+        [System.ObsoleteAttribute("use Load<T>")]
+        private static unsafe void LoadMarshal<T>(Stream stream, T[] dst, int buffersize)
+        {
+            int size = Marshal.SizeOf(typeof(T));
+            var buffer = new byte[buffersize * size];
+
+            int index = 0;
+            var rest = (int)(stream.Length - stream.Position);
+
+            while (rest >= buffer.Length)
+            {
+                rest -= stream.Read(buffer, 0, buffer.Length);
+                var gch = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+                try
+                {
+                    var p = gch.AddrOfPinnedObject();
+                    for (var i = 0; i < buffer.Length; i += size)
+                    {
+                        dst[index++] = (T)Marshal.PtrToStructure(p, typeof(T));
+                        p += size;
+                    }
+                }
+                finally
+                {
+                    gch.Free();
+                }
+            }
+
+        }
+
+    }
+}
 
 //var a = src.pix.AsMemory().Pin();
 //var b = a.Pointer;
 //src.pix.AsMemory().Length;
 
-    //強制 int double float 実装
-    //, FileType type = FileType.Noneを使用した読み込み
+//強制 int double float 実装
+//, FileType type = FileType.Noneを使用した読み込み

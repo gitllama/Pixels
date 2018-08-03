@@ -33,21 +33,21 @@ namespace Pixels
 
         protected Pixel()
         {
-
+            this.Bayer = this.Bayer ??  new Dictionary<string, (int x, int y, int width, int height)>();
+            this.SubPlane = this.SubPlane ?? new Dictionary<string, (int left, int top, int width, int height)>();
         }
 
-        public Pixel(int width, int height)
+        public Pixel(int width, int height) : this()
         {
             Width = width;
             Height = height;
             pix = new T[width * height];
-            SubPlane = new Dictionary<string, (int left, int top, int width, int height)>();
         }
 
         #endregion
 
 
-        #region Planes
+        #region Planes / Bayer
 
         public Dictionary<string, (int left, int top, int width, int height)> SubPlane;
 
@@ -57,7 +57,33 @@ namespace Pixels
             return SubPlane.ContainsKey(name) ? SubPlane[name] : (0, 0, Width, Height);
         }
 
+
+        public Dictionary<string, (int x, int y, int width, int height)> Bayer;
+
+        public (int x, int y, int width, int height) GetBayer(string name)
+        {
+            name = name ?? "";
+            return Bayer.ContainsKey(name) ? Bayer[name] : (0, 0, 1, 1);
+        }
+
+
+        protected internal (int left, int top, int width, int height, int incX, int incY) LoopState(string plane, string bayer)
+        {
+            var _plane = GetPlane(plane);
+            var _bayer = GetBayer(bayer);
+
+            return (
+                _plane.left + _bayer.x,
+                _plane.top + _bayer.y,
+                _plane.width - _bayer.x,
+                _plane.height - _bayer.y,
+                _bayer.width,
+                _bayer.height
+            );
+        }
+
         #endregion
+
 
         public T[] ToArray()
         {
@@ -72,7 +98,9 @@ namespace Pixels
             return dst;
         }
 
+
     }
+
 
     public class ReadOnlyPixel<T> : Pixel<T> where T : struct
     {
@@ -106,6 +134,7 @@ namespace Pixels
 
     }
 
+
     public class PixelByte<T> : Pixel<byte> where T : struct
     {
 
@@ -122,8 +151,6 @@ namespace Pixels
             Height = height;
             Bytesize  = Marshal.SizeOf(typeof(T));
             pix = new byte[width * height * Bytesize ];
-
-            SubPlane = new Dictionary<string, (int left, int top, int width, int height)>();
         }
 
         public new T[] ToArray()
@@ -162,6 +189,10 @@ namespace Pixels
     }
 
 
+}
+
+namespace Pixels.Future
+{
 
     [Obsolete("未実装")]
     public class PixelIntPtr<T> where T : struct
@@ -250,6 +281,5 @@ namespace Pixels
             return ref r;
         }
     }
-
 
 }
