@@ -1,17 +1,5 @@
 # Pixels
 
-- PixelEnum
-- PixelStruct / StructTest / StructBench
-  - Int24 etc
-    - [ ] Unit
-    - [x] Bench
-  - PixelBitConvertor
-    - [ ] Unit
-    - [x] Bench
-- Pixel / PixelTest / PixelBench
-- PixelExtentions / ExtentionsTest / ExtentionsBench
-- PixelIO / IOTest / IOBench
-
 ## PixelEnum
 
 特になし

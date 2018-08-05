@@ -13,6 +13,7 @@ namespace Pixels
     {
 
         protected internal T[] pix;
+        public ref T GetPinnableReference() => ref pix[0];
 
         public int Width { get; protected set; }
         public int Height { get; protected set; }
@@ -33,7 +34,7 @@ namespace Pixels
 
         protected Pixel()
         {
-            this.Bayer = this.Bayer ??  new Dictionary<string, (int x, int y, int width, int height)>();
+            this.CFA = this.CFA ??  new Dictionary<string, (int x, int y, int width, int height)>();
             this.SubPlane = this.SubPlane ?? new Dictionary<string, (int left, int top, int width, int height)>();
         }
 
@@ -58,29 +59,16 @@ namespace Pixels
         }
 
 
-        public Dictionary<string, (int x, int y, int width, int height)> Bayer;
+        public Dictionary<string, (int x, int y, int width, int height)> CFA;
 
-        public (int x, int y, int width, int height) GetBayer(string name)
+        public (int x, int y, int width, int height) GetCFA(string name)
         {
             name = name ?? "";
-            return Bayer.ContainsKey(name) ? Bayer[name] : (0, 0, 1, 1);
+            return CFA.ContainsKey(name) ? CFA[name] : (0, 0, 1, 1);
         }
 
 
-        protected internal (int left, int top, int width, int height, int incX, int incY) LoopState(string plane, string bayer)
-        {
-            var _plane = GetPlane(plane);
-            var _bayer = GetBayer(bayer);
 
-            return (
-                _plane.left + _bayer.x,
-                _plane.top + _bayer.y,
-                _plane.width - _bayer.x,
-                _plane.height - _bayer.y,
-                _bayer.width,
-                _bayer.height
-            );
-        }
 
         #endregion
 
@@ -109,28 +97,12 @@ namespace Pixels
 
         public new ref readonly T this[int index] => ref pix[index];
 
-
         public ReadOnlyPixel(int width, int height)
         {
             Width = width;
             Height = height;
             pix = new T[width * height];
-            SubPlane = new Dictionary<string, (int left, int top, int width, int height)>();
         }
-
-
-        #region Planes
-
-        public Dictionary<string, (int left, int top, int width, int height)> SubPlane;
-
-        public (int left, int top, int width, int height) GetPlane(string name)
-        {
-            return SubPlane.ContainsKey(name) ? SubPlane[name] : (0, 0, Width, Height);
-        }
-
-        #endregion
-
-
 
     }
 
@@ -138,7 +110,7 @@ namespace Pixels
     public class PixelByte<T> : Pixel<byte> where T : struct
     {
 
-        public int Bytesize { get; private set; }
+        public int Bytesize { get => Unsafe.SizeOf<T>(); }
 
         public new ref T this[int x, int y] => ref Unsafe.As<byte, T>(ref pix[(x + y * Width) * Bytesize]);
 
@@ -149,7 +121,6 @@ namespace Pixels
         {
             Width = width;
             Height = height;
-            Bytesize  = Marshal.SizeOf(typeof(T));
             pix = new byte[width * height * Bytesize ];
         }
 
@@ -177,18 +148,118 @@ namespace Pixels
             handle.Free();
         }
 
-        public IntPtr AddrOfPinnedObject()
+        public IntPtr AddrOfPinnedObject() => handle.AddrOfPinnedObject();
+        public unsafe void* ToPointer() => (handle.AddrOfPinnedObject()).ToPointer();
+        public unsafe byte* ToBytePointer() => (byte*)((handle.AddrOfPinnedObject()).ToPointer());
+
+    }
+
+
+    // Factory Class
+
+    public struct PixelTemplate
+    {
+        public int Width;
+        public int Height;
+        public Dictionary<string, Planes> SubPlane;
+        public Dictionary<string, CFArray> CFA;
+
+        public Type type;
+        public int offset;
+        public char[] separator;
+
+        public Pixel<T> Build<T>() where T : struct
         {
-            return handle.AddrOfPinnedObject();
+            var dst = new Pixel<T>(Width, Height);
+
+            if (type != typeof(string))
+            {
+
+            }
+            else
+            {
+
+            }
+
+            return null;
         }
 
-        public unsafe void* ToPointer()
+        public struct Planes
         {
-            return (handle.AddrOfPinnedObject()).ToPointer();
+            public int left;
+            public int top;
+            public int width;
+            public int height;
+        }
+        public struct CFArray
+        {
+            public int x;
+            public int y;
+            public int width;
+            public int height;
         }
     }
 
 
+    public static class PixelBuilder
+    {
+        public static Pixel<T> Create<T>(int width, int height) where T : struct
+        {
+            return new Pixel<T>(width, height);
+        }
+
+        public static Pixel<T> Create<T>(int width, int height, T[] src) where T : struct
+        {
+            return new Pixel<T>(width, height)
+            {
+                pix = src
+            };
+        }
+
+
+        // var hoge = new PixelTemplate
+        // {
+        //    Age = 10,
+        //    Name = "hogehoge"
+        // }.Create();
+        public static Pixel<T> Create<T>(this PixelTemplate template) where T : struct
+        {
+            var dst = new Pixel<T>(template.Width, template.Height);
+
+            foreach (var i in template.SubPlane ?? new Dictionary<string, PixelTemplate.Planes>())
+            {
+                dst.SubPlane.Add(i.Key, (i.Value.left, i.Value.top, i.Value.width, i.Value.height));
+            }
+            foreach (var i in template.CFA ?? new Dictionary<string, PixelTemplate.CFArray>())
+            {
+                dst.CFA.Add(i.Key, (i.Value.x, i.Value.y, i.Value.width, i.Value.height));
+            }
+            return dst;
+        }
+
+        public static Pixel<T> Create<T>(string path) where T : struct
+        {
+            return DDL.DDL.Deserialize<PixelTemplate>(path).Create<T>();
+        }
+
+
+        public static Pixel<U> Clone<T, U>(this Pixel<T> src) where T : struct where U : struct
+        {
+            return new Pixel<U>(src.Width, src.Height)
+            {
+                SubPlane = src.SubPlane,
+                CFA = src.CFA
+            };
+        }
+        public static Pixel<T> Clone<T>(this Pixel<T> src) where T : struct
+        {
+            return new Pixel<T>(src.Width, src.Height)
+            {
+                SubPlane = src.SubPlane,
+                CFA = src.CFA
+            };
+        }
+    }
 }
 
 namespace Pixels.Future

@@ -5,12 +5,9 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pixels", "Pixels\Pixels.csproj", "{A85D43F3-D2D4-42E0-B39B-4676FA04372C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTest", "XUnitTest\XUnitTest.csproj", "{5D2CA4B6-2ED1-443D-B5F5-6BDC002BC4D5}"
-	ProjectSection(ProjectDependencies) = postProject
-		{A85D43F3-D2D4-42E0-B39B-4676FA04372C} = {A85D43F3-D2D4-42E0-B39B-4676FA04372C}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pixels.Framework", "Pixels.Framework\Pixels.Framework.csproj", "{E7D2A610-D822-40C7-A172-D9E430BAC200}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTest", "XUnitTest\XUnitTest.csproj", "{9754EB91-C480-418D-AB87-59ECD837BB2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,14 +19,14 @@ Global
 		{A85D43F3-D2D4-42E0-B39B-4676FA04372C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A85D43F3-D2D4-42E0-B39B-4676FA04372C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A85D43F3-D2D4-42E0-B39B-4676FA04372C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5D2CA4B6-2ED1-443D-B5F5-6BDC002BC4D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5D2CA4B6-2ED1-443D-B5F5-6BDC002BC4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D2CA4B6-2ED1-443D-B5F5-6BDC002BC4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5D2CA4B6-2ED1-443D-B5F5-6BDC002BC4D5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E7D2A610-D822-40C7-A172-D9E430BAC200}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E7D2A610-D822-40C7-A172-D9E430BAC200}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7D2A610-D822-40C7-A172-D9E430BAC200}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7D2A610-D822-40C7-A172-D9E430BAC200}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9754EB91-C480-418D-AB87-59ECD837BB2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9754EB91-C480-418D-AB87-59ECD837BB2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9754EB91-C480-418D-AB87-59ECD837BB2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9754EB91-C480-418D-AB87-59ECD837BB2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

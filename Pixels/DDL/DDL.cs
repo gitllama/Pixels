@@ -47,5 +47,10 @@ namespace Pixels.DDL
         {
             return Parse(path).ToObject<T>();
         }
+
+        public static void Serialize<T>(this T obj, string path)
+        {
+            File.WriteAllText(path, JsonConvert.SerializeObject(obj));
+        }
     }
 }

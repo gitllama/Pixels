@@ -22,7 +22,7 @@ namespace XUnitTest
             random.NextBytes(bytes);
            
             Assert.Equal(BitConverter.ToInt16(bytes, 0), Unsafe.As<byte, Int16>(ref bytes[0]));
-            Assert.Equal(PixelBitConverter.ToInt16E(bytes, 0), Unsafe.As<byte, Int16E>(ref bytes[0]));
+            Assert.Equal(PixelBitConverter.To<Int16E>(bytes, 0), Unsafe.As<byte, Int16E>(ref bytes[0]));
 
         }
 

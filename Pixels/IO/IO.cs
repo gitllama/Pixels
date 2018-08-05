@@ -197,34 +197,7 @@ namespace Pixels.IO
 
     }
 
-    // var hoge = new HogeBuilder
-    // {
-    //    Age = 10,
-    //    Name = "hogehoge"
-    // }.Build();
-    public class PixelBuilder
-    {
-        public int Width;
-        public int Height;
-        public string path;
-        public Type type;
 
-        public Pixel<T> Build<T>() where T : struct
-        {
-            var dst = new Pixel<T>(Width, Height);
-
-            if(type != typeof(string))
-            {
-
-            }
-            else
-            {
-
-            }
-
-            return null;
-        }
-    }
 }
 
 namespace Pixels.IO.Deprecated

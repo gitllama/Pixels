@@ -458,33 +458,7 @@ namespace Pixels
 
     public static class PixelBitConverter
     {
-        public static Byte ToByte(byte[] value, int startindex) => value[0];
-
-        public static Int16 ToInt16(byte[] value, int startindex) => Unsafe.As<byte, Int16>(ref value[startindex]);
-        public static Int24 ToInt24(byte[] value, int startindex) => Int24.FromByte(value, startindex);
-        public static Int32 ToInt32(byte[] value, int startindex) => Unsafe.As<byte, Int32>(ref value[startindex]);
-        public static Int64 ToInt64(byte[] value, int startindex) => Unsafe.As<byte, Int64>(ref value[startindex]);
-
-        public static UInt16 ToUInt16(byte[] value, int startindex) => Unsafe.As<byte, UInt16>(ref value[startindex]);
-        public static UInt24 ToUInt24(byte[] value, int startindex) => UInt24.FromByte(value, startindex);
-        public static UInt32 ToUInt32(byte[] value, int startindex) => Unsafe.As<byte, UInt32>(ref value[startindex]);
-        public static UInt64 ToUInt64(byte[] value, int startindex) => Unsafe.As<byte, UInt64>(ref value[startindex]);
-
-        public static Single ToSingle(byte[] value, int startindex) => Unsafe.As<byte, Single>(ref value[startindex]);
-        public static Double ToDouble(byte[] value, int startindex) => Unsafe.As<byte, Double>(ref value[startindex]);
-
-        public static Int16E ToInt16E(byte[] value, int startindex) => Int16E.FromByte(value, startindex);
-        public static Int24E ToInt24E(byte[] value, int startindex) => Int24E.FromByte(value, startindex);
-        public static Int32E ToInt32E(byte[] value, int startindex) => Int32E.FromByte(value, startindex);
-        public static Int64E ToInt64E(byte[] value, int startindex) => Int64E.FromByte(value, startindex);
-
-        public static UInt16E ToUInt16E(byte[] value, int startindex) => UInt16E.FromByte(value, startindex);
-        public static UInt24E ToUInt24E(byte[] value, int startindex) => UInt24E.FromByte(value, startindex);
-        public static UInt32E ToUInt32E(byte[] value, int startindex) => UInt32E.FromByte(value, startindex);
-        public static UInt64E ToUInt64E(byte[] value, int startindex) => UInt64E.FromByte(value, startindex);
-
-        public static SingleE ToSingleE(byte[] value, int startindex) => SingleE.FromByte(value, startindex);
-        public static DoubleE ToDoubleE(byte[] value, int startindex) => DoubleE.FromByte(value, startindex);
+        public static T To<T>(byte[] value, int startindex) where T : struct => Unsafe.As<byte, T>(ref value[startindex]);
 
     }
 

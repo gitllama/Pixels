@@ -124,7 +124,7 @@ namespace XUnitTest
             random.NextBytes(bytes);
             for(var i = 0;i < 4;i++)
             {
-                Assert.Equal(PixelBitConverter.ToDouble(bytes, i), Pixels.Deprecated.PixelBitConverter.ToDouble(bytes, i));
+                Assert.Equal(PixelBitConverter.To<Double>(bytes, i), Pixels.Deprecated.PixelBitConverter.ToDouble(bytes, i));
             }
         }
 

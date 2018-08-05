@@ -6,6 +6,8 @@ using Xunit.Abstractions;
 using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using System.Runtime.CompilerServices;
+using Pixels.DDL;
+using System.IO;
 
 namespace XUnitTest
 {
@@ -13,6 +15,13 @@ namespace XUnitTest
     {
         readonly ITestOutputHelper output;
         Random random = new Random();
+
+
+        [Theory]
+        [InlineData(@"\Sample\sample.json")]
+        public void TestFactory(string path)
+        {
+                    }
 
         [Fact]
         public unsafe void TestLockPixel()
