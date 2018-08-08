@@ -67,9 +67,16 @@ namespace Pixels.Processing
                 var p = (byte*)pin;
                 for (int y = 0; y < height; ++y)
                 {
-                    for (int x = y * width; x < y * width + width; ++x)
+                    for (int x = 0; x < width; ++x)
                     {
-                        Set(ref p, (int)src.pix[x], option);
+                        //Set(ref p, (int)src.pix[x], option);
+                        var M = option.LUT((int)src[x,y]);
+                        //var M = (byte)src[x, y];
+
+                        // *p++ = ((N << 16) | (N << 8) | N);
+                        *p++ = M;
+                        *p++ = M;
+                        *p++ = M;
                     }
                     p += residue;
                 }

@@ -140,7 +140,6 @@ namespace Pixels.IO
         }
 
 
-
         /*
         public static void Load<T, TT>(this Pixel<TT> dst, string path, Func<T, TT> func, int buffersize = 0, int offset = 0) where T : struct where TT : struct
         {

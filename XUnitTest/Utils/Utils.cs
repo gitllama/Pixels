@@ -1,7 +1,9 @@
 ﻿using Pixels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using Xunit;
 
@@ -18,6 +20,39 @@ namespace XUnitTest
             sw.Stop();
             Console.WriteLine($"　{sw.ElapsedMilliseconds}ms");
         }
+
+        // .Net Frameworkなら以下で動くが、.Net Coreの際は工夫必要
+        // var pro = new System.Diagnostics.Process();
+        // pro.StartInfo.FileName = outputpath;
+        // pro.Start();
+        public static void CallProcess(string url)
+        {
+            try
+            {
+                Process.Start(url);
+            }
+            catch
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    url = url.Replace("&", "^&");
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("cmd", $"/c start {url}") { CreateNoWindow = true });
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    System.Diagnostics.Process.Start("xdg-open", url);
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    System.Diagnostics.Process.Start("open", url);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
 
 
         public static dynamic Reflection(this object src)

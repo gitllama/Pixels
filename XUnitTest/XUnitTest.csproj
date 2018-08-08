@@ -18,6 +18,7 @@
     <PackageReference Include="BenchmarkDotNet" Version="0.11.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="OpenCover" Version="4.6.519" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0004" />
     <PackageReference Include="xunit" Version="2.4.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
@@ -36,7 +37,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Pixels\IOTest.cs">
+    <Compile Update="Pixels\2_IOTest.cs">
       <Generator></Generator>
     </Compile>
   </ItemGroup>
@@ -45,7 +46,13 @@
     <None Update="Sample\default.yaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Sample\sample.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Sample\sample.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Sample\sample24.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Sample\Script.csx">

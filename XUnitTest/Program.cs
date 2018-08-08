@@ -11,10 +11,11 @@ namespace XUnitTest
 #if DEBUG
 
 #else
+            BenchmarkRunner.Run<OtherBench>();
             //BenchmarkRunner.Run<StructBench>();
             //BenchmarkRunner.Run<PixelBench>();
 
-            BenchmarkRunner.Run<ExtensionsBench>();
+            //BenchmarkRunner.Run<ExtensionsBench>();
             //BenchmarkRunner.Run<LoopBlock>();
             //BenchmarkRunner.Run<Bench_IO>();
 

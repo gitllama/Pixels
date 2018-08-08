@@ -1,0 +1,14 @@
+﻿Scale : 1
+ScalingMode : NearestNeighbor
+Shortcut :
+  "Add"      : "next"
+  "Subtract" : "back"
+  "NumPad1"  : "Dark\\PGAx1_Full\\Ave.trw"
+  "NumPad2"  : "Dark\\PGAx1_2H\\Ave.trw"
+  "NumPad3"  : "Dark\\PGAx1_Full\\SglHOB.trw"
+  "NumPad4"  : "L10\\PGAx1_Full\\Sgl.trw"
+  "NumPad5"  : "L50\\PGAx1_Full\\Ave.trw"
+  "NumPad6"  : "L90\\PGAx1_Full\\Sgl.trw"
+  "NumPad7"  : "mono"
+  "NumPad8"  : "color"
+  "NumPad9"  : "color2"

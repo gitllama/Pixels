@@ -22,6 +22,18 @@ namespace Pixels.Framework
 
         private const string mayname = "Goro";
 
+        public static void ToWriteableBitmap24<T>(this Pixel<T> src, WriteableBitmap bitmap, Options option = null) where T :unmanaged
+        {
+            switch (src)
+            {
+                case Pixel<Int32> p:
+                    WriteableBitmap24(p, bitmap, new Options() {  bayer = Bayer.Mono });
+                    break;
+                default:
+                    throw new Exception();
+            }
+        }
+
         /*/#>*/
 
         #endregion
@@ -29,7 +41,7 @@ namespace Pixels.Framework
         #region [T4]ToWriteableBitmap24 
 
         /*<# Method(@"*/
-        public static void ToWriteableBitmap24(this Pixel<Int32> src, WriteableBitmap bitmap, Options option = null)
+        public static void WriteableBitmap24(Pixel<Int32> src, WriteableBitmap bitmap, Options option = null)
         {
             bitmap.Lock();
 

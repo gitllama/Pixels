@@ -2,11 +2,43 @@
   "Width": 2256,
   "Height": 1178,
   "SubPlane": {
+    "Normal": {
+      "left": 154,
+      "top": 43,
+      "width": 1948,
+      "height": 1108
+    },
     "Stagger": {
       "left": 149,
       "top": 39,
       "width": 1957,
       "height": 1116
+    }
+  },
+  "CFA": {
+    "Gr": {
+      "x": 0,
+      "y": 0,
+      "width": 2,
+      "height": 2
+    },
+    "R": {
+      "x": 0,
+      "y": 1,
+      "width": 2,
+      "height": 2
+    },
+    "B": {
+      "x": 1,
+      "y": 0,
+      "width": 2,
+      "height": 2
+    },
+    "Gb": {
+      "x": 1,
+      "y": 1,
+      "width": 2,
+      "height": 2
     }
   }
 }

@@ -35,7 +35,7 @@ namespace Pixels.Processing
             offset = 0;
             bitshift = 0;
             stagger = (0, 0);
-            _LUT = new byte[UInt16.MaxValue + 1];
+
             SetGamma(1);
         }
 
@@ -43,13 +43,15 @@ namespace Pixels.Processing
 
         public void SetGamma(double gamma, int max = Byte.MaxValue)
         {
+            _LUT = new byte[UInt16.MaxValue];
             if (Gamma != (gamma, max))
             {
-                for (var i = 0; i <= max; i++)
+                var i = 0;
+                for (; i <= max; i++)
                 {
                     _LUT[i] = (byte)(255.0 * Math.Pow(((double)i / max), 1 / gamma));
                 }
-                for (var i = max + 1; i <= UInt16.MaxValue; i++)
+                for (; i <= UInt16.MaxValue - 1; i++)
                 {
                     _LUT[i] = (byte)byte.MaxValue;
                 }
@@ -74,7 +76,7 @@ namespace Pixels.Processing
             };
         }
 
-        public byte LUT(int value) => _LUT[value > _LUT.Length ? _LUT.Length - 1 : value < 0 ? 0 : value];
+        public byte LUT(int value)=> _LUT[(value >= _LUT.Length ? _LUT.Length - 1 : value < 0 ? 0 : value)];
 
         public (int left, int top, int width, int height)[] GetOrigins<T>(Pixel<T> src) where T : struct
         {

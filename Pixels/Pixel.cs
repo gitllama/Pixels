@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Numerics;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -32,13 +33,13 @@ namespace Pixels
 
         #region Constructor
 
-        protected Pixel()
+        protected internal Pixel()
         {
             this.CFA = this.CFA ??  new Dictionary<string, (int x, int y, int width, int height)>();
             this.SubPlane = this.SubPlane ?? new Dictionary<string, (int left, int top, int width, int height)>();
         }
 
-        public Pixel(int width, int height) : this()
+        protected internal Pixel(int width, int height) : this()
         {
             Width = width;
             Height = height;
@@ -48,26 +49,28 @@ namespace Pixels
         #endregion
 
 
-        #region Planes / Bayer
+        #region Planes / CFA
 
         public Dictionary<string, (int left, int top, int width, int height)> SubPlane;
+        public Dictionary<string, (int x, int y, int width, int height)> CFA;
 
         public (int left, int top, int width, int height) GetPlane(string name)
         {
             name = name ?? "";
-            return SubPlane.ContainsKey(name) ? SubPlane[name] : (0, 0, Width, Height);
+            return
+                name == "" ? (0, 0, Width, Height) :
+                SubPlane.ContainsKey(name) ? SubPlane[name] :
+                throw new KeyNotFoundException();
         }
-
-
-        public Dictionary<string, (int x, int y, int width, int height)> CFA;
 
         public (int x, int y, int width, int height) GetCFA(string name)
         {
             name = name ?? "";
-            return CFA.ContainsKey(name) ? CFA[name] : (0, 0, 1, 1);
+            return
+                name == "" ? (0, 0, 1, 1) :
+                CFA.ContainsKey(name) ? CFA[name] :
+                throw new KeyNotFoundException();
         }
-
-
 
 
         #endregion
@@ -134,23 +137,20 @@ namespace Pixels
     }
 
 
-    public class LockPixel<T> : IDisposable where T : struct 
+    public class PixelVector4 : Pixel<Vector4>
     {
-        GCHandle handle;
 
-        public LockPixel(Pixel<T> src) 
+        //public new ref T this[int x, int y] => ref Unsafe.As<byte, T>(ref pix[(x + y * Width) * Bytesize]);
+
+        //public new ref T this[int index] => ref Unsafe.As<byte, T>(ref pix[index * Bytesize]);
+
+
+        public PixelVector4(int width, int height) : base()
         {
-            handle = GCHandle.Alloc(src.pix, GCHandleType.Pinned);
+            Width = width;
+            Height = height;
+            pix = new Vector4[width * height / 4];
         }
-
-        public void Dispose()
-        {
-            handle.Free();
-        }
-
-        public IntPtr AddrOfPinnedObject() => handle.AddrOfPinnedObject();
-        public unsafe void* ToPointer() => (handle.AddrOfPinnedObject()).ToPointer();
-        public unsafe byte* ToBytePointer() => (byte*)((handle.AddrOfPinnedObject()).ToPointer());
 
     }
 
@@ -167,22 +167,6 @@ namespace Pixels
         public Type type;
         public int offset;
         public char[] separator;
-
-        public Pixel<T> Build<T>() where T : struct
-        {
-            var dst = new Pixel<T>(Width, Height);
-
-            if (type != typeof(string))
-            {
-
-            }
-            else
-            {
-
-            }
-
-            return null;
-        }
 
         public struct Planes
         {
@@ -262,6 +246,29 @@ namespace Pixels
     }
 }
 
+namespace Pixels.Deprecated
+{
+    //where : unmanaged と fixed(T*) で代用可
+    public class LockPixel<T> : IDisposable where T : struct 
+    {
+        GCHandle handle;
+
+        public LockPixel(Pixel<T> src) 
+        {
+            handle = GCHandle.Alloc(src.pix, GCHandleType.Pinned);
+        }
+
+        public void Dispose()
+        {
+            handle.Free();
+        }
+
+        public IntPtr AddrOfPinnedObject() => handle.AddrOfPinnedObject();
+        public unsafe void* ToPointer() => (handle.AddrOfPinnedObject()).ToPointer();
+        public unsafe byte* ToBytePointer() => (byte*)((handle.AddrOfPinnedObject()).ToPointer());
+
+    }
+}
 namespace Pixels.Future
 {
 

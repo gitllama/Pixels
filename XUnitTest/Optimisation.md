@@ -141,9 +141,10 @@ ref struct RefStruct
 {
     private Span<int> _span; //OK
 }
+
+//Core2.1ではストリームからの読み出しを直接Spanにとれる
+rest -= stream.Read(buffer);
 ```
-// Span<byte> buffer = stackalloc byte[BufferSize]; //Core 2.1
-// rest -= stream.Read(buffer); //Core 2.1
 
 ***
 [Span構造体](https://ufcpp.net/study/csharp/resource/span/)
@@ -164,8 +165,31 @@ static unsafe void Main(string[] args)
     fixed (int* p = a){ }
 }
 ```
+### 1-4. where T : unmanaged
 
-### 1-4. System.Runtime.CompilerServices
+もともと、ジェネリックなクラス/関数内で```T*```は取得することができなかったが、C#7.3よりunmanaged制約を付けることができるようになっている。これにより、ジェネリック関数内でポインターの使用が可能となった。
+
+基本的にはC++のtemplateでは全てインライン展開され、C#でも値型であれば（ボックス化を避ける為）展開されるため実行効率を犠牲にすることはない。
+
+また、C# リファレンスによると
+
+> unmanaged 制約は、class や struct 制約と組み合わせることはできません。 unmanaged 制約は struct にする必要がある型を適用します
+
+とのことであるが、ILSpyを使用したところ、unmanaged制約はstruct制約として展開されていることが確認できる。
+
+```cs
+// struct制約
+public static void A<T>() where T : struct { }
+// unmanaged制約
+public static void B<[IsUnmanaged] T>() where T : struct, ValueType { }
+// struct制約 IL
+.method public hidebysig static void A<valuetype .ctor ([netstandard]System.ValueType) T> () cil managed
+// unmanaged制約 IL
+.method public hidebysig static void B<valuetype .ctor ([netstandard]System.ValueType modreq([netstandard]System.Runtime.InteropServices.UnmanagedType) ) T> () cil managed
+
+```
+
+### 1-5. System.Runtime.CompilerServices
 
 ```cs
 using System.Runtime.CompilerServices;

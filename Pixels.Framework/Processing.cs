@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using Pixels;
 using Pixels.IO;
+using Pixels.Extensions;
 using Pixels.Processing;
 
 namespace Pixels.Framework
@@ -29,6 +30,20 @@ namespace Pixels.Framework
             public int height;
         }
 
+
+    }
+
+    public class ProcessingData<T,U> where T : struct where U : struct
+    {
+        public int Width;
+        public int Height;
+        public int Offset;
+        public string FileType;
+
+        public Pixel<T> raw;
+        public Pixel<U> buf;
+        public WriteableBitmap img;
+
         public Type GetFileType()
         {
             switch (FileType)
@@ -49,142 +64,117 @@ namespace Pixels.Framework
         }
     }
 
-    // Raw -[RunPreProcess]-> intermediate -[]-> WriteableBitmap
-    //
-    //
-    //
-    //
-    public class Processing
+
+    public static class Processing
     {
-        PixelType setting = new PixelType();
-        public WriteableBitmap img => postProcess?.img;
-        public PreProcess preProcess;
-        public MainProcess mainProcess;
-        public PostProcess postProcess;
-
-        public Processing()
-        {
-            preProcess = new PreProcess();
-            mainProcess = new MainProcess(preProcess);
-            postProcess = new PostProcess(mainProcess);
-        }
-
-        public void Init(string configPath)
+        public static ProcessingData<T, U> Init<T, U>(this ProcessingData<T, U> data, string configPath) where T : struct where U : struct
         {
             var hoge = Pixels.DDL.DDL.Deserialize<PixelType>(configPath);
 
-            if (hoge.Width != setting.Width && hoge.Height != setting.Height)
+            if (hoge.Width != data.Width || hoge.Height != data.Height)
             {
-                preProcess.Init(hoge);
-                mainProcess.Init(hoge.Width, hoge.Height, hoge.SubPlanes);
-                postProcess.Init(hoge.Width, hoge.Height, hoge.SubPlanes);
+                data.Width = hoge.Width;
+                data.Height = hoge.Height;
+                data.InitRaw();
+                data.InitBuf();
+                data.InitImg();
             }
-            setting = hoge;
+
+            return data;
         }
 
-        public class PreProcess
+        public static ProcessingData<T, U> InitRaw<T, U>(this ProcessingData<T, U> data) where T : struct where U : struct
         {
-            public Pixel<int> raw;
-            PixelType setting;
-
-            public void Init(PixelType setting)
-            {
-                raw = new Pixel<int>(setting.Width, setting.Height);
-                setting.SubPlanes.ToList().ForEach(x => raw.SubPlane.Add(x.Key, (x.Value.left, x.Value.top, x.Value.width, x.Value.height)));
-                this.setting = setting;
-            }
-
-            public void Run(string path)
-            {
-                //raw.Load(path, setting.GetFileType());
-            }
-
+            data.raw = PixelBuilder.Create<T>(data.Width, data.Height);
+            return data;
+        }
+        public static ProcessingData<T, U> InitBuf<T, U>(this ProcessingData<T, U> data) where T : struct where U : struct
+        {
+            data.buf = PixelBuilder.Create<U>(data.Width, data.Height);
+            return data;
+        }
+        public static ProcessingData<T, U> InitImg<T, U>(this ProcessingData<T, U> data) where T : struct where U : struct
+        {
+            data.img = new WriteableBitmap(data.Width, data.Height, 96, 96, System.Windows.Media.PixelFormats.Bgr24, null);
+            return data;
         }
 
-        public class MainProcess
+        //public static void ProcessingAll<T,U>(this ProcessingData<T,U> data) where T : struct where U : struct
+        //{
+        //    preProcess = new PreProcess();
+        //    mainProcess = new MainProcess(preProcess);
+        //    postProcess = new PostProcess(mainProcess);
+        //}
+
+        public static ProcessingData<T, U> PreProcess<T, U>(this ProcessingData<T, U> data, string path) where T : struct where U : struct
         {
-            public Pixel<int> raw;
-            PreProcess preProcess;
-            public string name = "";
+            //var constructedType = typeof(Pixel<>).MakeGenericType(type);
+            //var method = constructedType.GetMethod("Fuga");
+            //return method.Invoke(obj, null);
 
-            public MainProcess(PreProcess pre)
-            {
-                preProcess = pre;
-            }
+            data.raw.Load<T>(path); //data.GetFileType()
+            return data;
+        }
 
-            public void Init(int width, int height, Dictionary<string, PixelType.Area> subPlanes)
-            {
-                raw = new Pixel<int>(width, height);
-                subPlanes.ToList().ForEach(x => raw.SubPlane.Add(x.Key, (x.Value.left, x.Value.top, x.Value.width, x.Value.height)));
-            }
-            public void Run(string code)
-            {
-                if (code == null)
-                {
-                    for(var i =0;i<raw.Width*raw.Height;i++)
-                    {
-                        //raw.pix[i] = preProcess.raw.pix[i] >>= 10;
-                    }
-                    
-                    //src.Map(intermediate, (x, y, src, dst) =>
-                    //{
-                    //    dst[x, y] = src[x, y] >> 0;
-                    //}, subPlane: "Full");
-                }
-                else
-                {
-                    //CAsync(src, intermediate, code).Wait();
-                }
+        public static ProcessingData<T, U> MainProcess<T, U>(this ProcessingData<T, U> data) where T : unmanaged where U : unmanaged
+        {
+            //data.raw.Map(data.buf, (i)=> i.);
+            return data;
+        }
 
-                //if (src.SubPlane.ContainsKey("Eff"))
+        public static ProcessingData<T, U> MainProcess<T, U>(this ProcessingData<T, U> data, Func<T,U> func) where T : unmanaged where U : unmanaged
+        {
+            data.raw.Map(data.buf, func);
+            return data;
+        }
+
+        public static ProcessingData<T, U> MainProcess<T, U>(this ProcessingData<T, U> data, string code) where T : struct where U : struct
+        {
+            if (code == null)
+            {
+                //src.Map(intermediate, (x, y, src, dst) =>
                 //{
-                //    src.Map(intermediate, (x, y, src, dst) => {
-                //        dst[x, y] = src[x, y];
-                //    }, subPlane: "Full");
-                //    src.Map(intermediate, (x, y, src, dst) => {
-                //        dst[x, y] = src[x, y] >> 8;
-                //    }, subPlane: "Eff");
-                //}
-                //else
-                //    src.Map(intermediate, (x, y, src, dst) => {
-                //        dst[x, y] = src[x, y] >> 8;
-                //    }, subPlane: "Full");
+                //    dst[x, y] = src[x, y] >> 0;
+                //}, subPlane: "Full");
             }
+            else
+            {
+                //CAsync(src, intermediate, code).Wait();
+            }
+
+            //if (src.SubPlane.ContainsKey("Eff"))
+            //{
+            //    src.Map(intermediate, (x, y, src, dst) => {
+            //        dst[x, y] = src[x, y];
+            //    }, subPlane: "Full");
+            //    src.Map(intermediate, (x, y, src, dst) => {
+            //        dst[x, y] = src[x, y] >> 8;
+            //    }, subPlane: "Eff");
+            //}
+            //else
+            //    src.Map(intermediate, (x, y, src, dst) => {
+            //        dst[x, y] = src[x, y] >> 8;
+            //    }, subPlane: "Full");
+            return data;
         }
 
-        public class PostProcess
+
+        public static void PostProcess<T, U>(this ProcessingData<T, U> data, bool color, int bitshift) where T : unmanaged where U : unmanaged
         {
-            public WriteableBitmap img;
-            Options option;
-            public string name = "";
-            MainProcess mainProcess;
+            //pd.bayer = Bayer.Mono;
+            //pd.Developing(mainProcess.raw, plane: "Full", parallel: true);
 
-            public PostProcess(MainProcess main)
-            {
-                mainProcess = main;
-            }
-
-            public void Init(int width, int height, Dictionary<string, PixelType.Area> subPlanes)
-            {
-                option = new Options();
-                img = new WriteableBitmap(width, height, 96, 96, System.Windows.Media.PixelFormats.Bgr24, null);
-            }
-            public void Run(bool color, int bitshift)
-            {
-                //pd.bayer = Bayer.Mono;
-                //pd.Developing(mainProcess.raw, plane: "Full", parallel: true);
-
-                //pd.bitshift = bitshift;
-                //if (color)
-                //{
-                //    pd.bayer = Bayer.RG;
-                //    pd.SetGain(1.8f, 1f, 2.59f);
-                //    pd.stagger = (0, 1);
-                //    pd.Developing(mainProcess.raw, plane: "Full", parallel: true);
-                //}
-                mainProcess.raw.ToWriteableBitmap24(img);
-            }
+            //pd.bitshift = bitshift;
+            //if (color)
+            //{
+            //    pd.bayer = Bayer.RG;
+            //    pd.SetGain(1.8f, 1f, 2.59f);
+            //    pd.stagger = (0, 1);
+            //    pd.Developing(mainProcess.raw, plane: "Full", parallel: true);
+            //}
+            data.raw.ToWriteableBitmap24(data.img);
         }
+
     }
 }
 
