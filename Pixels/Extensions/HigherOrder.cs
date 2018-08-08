@@ -270,6 +270,7 @@ namespace Pixels.Extensions
         public static Pixel<T> MapSelf<T>(this Pixel<T> src, Func<T, T> func, string subPlane = null, string cfa = null, bool parallel = false) where T : unmanaged
             => Map(src, src, func, subPlane, cfa, parallel);
 
+
     }
 
 }
