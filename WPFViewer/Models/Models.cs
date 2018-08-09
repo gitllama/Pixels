@@ -97,6 +97,19 @@ namespace WPFViewer.Models
             process.Init(path);
             Title = null;
             RaisePropertyChanged("img");
+
+            TaskBuilder.Run(() =>
+            {
+
+            },
+            () =>
+            {
+
+            },
+            ()=>
+            {
+
+            });
         }
 
         public void ReadRaw(string path)

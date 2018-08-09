@@ -57,6 +57,9 @@ namespace XUnitTest
             var src = PixelBuilder.Create<Int32>(path);
             Statistics.Random.Uniform(src);
 
+            //32bit 環境だとlong や double の Atomic なアクセスは言語機能としてはカバー
+            //してないので読み込みもInterlocked.Read必要
+
             double expected = 0;
             double actual = 0;
             object lockobj = new object();
@@ -67,6 +70,7 @@ namespace XUnitTest
                 {
                     actual += n;
                 }
+                //Interlocked.Add(ref total, x);
             }, palne, cfa, true);
 
             Assert.Equal(expected, actual);

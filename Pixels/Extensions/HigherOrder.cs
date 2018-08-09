@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 namespace Pixels.Extensions
 {
 
+    //32bit 環境だとlong や double の Atomic なアクセスは言語機能としてはカバー
+    //してないので読み込みもInterlocked.Read必要
+
     /* Fill : 固定値で設定します
      * 
      *   1 : Fill(Pixel, val)
